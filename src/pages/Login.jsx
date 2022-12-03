@@ -30,7 +30,7 @@ function reducer(state, action) {
     case Actions.setPassword:
       return { ...state, password: action.payload };
     case Actions.setId:
-      return { ...state, id: new Date.now() };
+      return { ...state, id: Date.now() };
   }
 }
 
