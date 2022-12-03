@@ -1,0 +1,77 @@
+[
+  {
+    "field": "User ID",
+    "type": "text",
+    "name": "userID",
+    "id": "userID"
+  },
+  {
+    "field": "Employee Name",
+    "type": "text",
+    "name": "empName",
+    "id": "empName"
+  },
+  {
+    "field": "PIN",
+    "type": "text",
+    "name": "pin",
+    "id": "pin"
+  },
+  {
+    "field": "Code of Privilege",
+    "type": "select",
+    "name": "codeOfPrivilege",
+    "id": "codeOfPrivilege",
+    "endPoint": "http://localhost:4000/users"
+  },
+  {
+    "field": "Type of User",
+    "type": "text",
+    "name": "typeOfUser",
+    "id": "typeOfUser"
+  },
+  {
+    "field": "Branch Office Code",
+    "type": "select",
+    "name": "branchOfficeCode",
+    "id": "branchOfficeCode",
+    "endPoint": "http://localhost:4000/users"
+
+  },
+  {
+    "field": "Family Name",
+    "type": "text",
+    "name": "familyName",
+    "id": "familyName"
+  },
+  {
+    "field": "First Name",
+    "type": "text",
+    "name": "firstName",
+    "id": "firstName"
+  },
+  {
+    "field": "Furigana Family Name（カナ）",
+    "type": "text",
+    "name": "furiganaFamilyName",
+    "id": "furiganaFamilyName"
+  },
+  {
+    "field": "Furigana of First Name（カナ）",
+    "type": "text",
+    "name": "furiganaFirstName",
+    "id": "furiganaFirstName"
+  },
+  {
+    "field": "Email Address",
+    "type": "email",
+    "name": "email",
+    "id": "email"
+  },
+  {
+    "field": "Face Photo",
+    "type": "text",
+    "name": "facePhoto",
+    "id": "facePhoto"
+  }
+]

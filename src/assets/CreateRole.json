@@ -1,0 +1,15 @@
+[
+    {
+        "field": "Role Name",
+        "type": "text",
+        "name": "roleName",
+        "id": "roleName"
+    },
+    {
+        "field": "Role Code",
+        "type": "text",
+        "name": "roleCode",
+        "id": "roleCode"
+    }
+
+]

@@ -1,0 +1,21 @@
+[
+    {
+        "field": "Branch Office Code (営業所コード)",
+        "type": "text",
+        "name": "branchOfficeCode",
+        "id": "branchOfficeCode"
+    },
+    {
+        "field": "Branch Office Name (営業所名)",
+        "type": "text",
+        "name": "branchOfficeName",
+        "id": "branchOfficeName"
+    },
+    {
+        "field": "Lock Code (ロックコード)",
+        "type": "text",
+        "name": "lockCode",
+        "id": "lockCode"
+    }
+
+]
