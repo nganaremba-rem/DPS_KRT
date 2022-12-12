@@ -41,7 +41,7 @@ export const postData = (data, url) => {
 
 const deleteRequest = (url) => {
   return axios.delete(url, {
-    baseURL: baseURL,
+    baseURL: postURL,
   });
 };
 
