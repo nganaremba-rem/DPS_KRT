@@ -1,6 +1,6 @@
 import { Button } from "@mui/material";
 import React, { useEffect, useState } from "react";
-// import { AiOutlinePlusCircle } from "react-icons/ai";
+import { AiOutlinePlusCircle } from "react-icons/ai";
 import { getAPI } from "../api/Api";
 import { endpoints } from "../endpoints";
 import { lazyLoad } from "../lazyLoad";
@@ -9,7 +9,7 @@ import TextField from "./Form/TextField";
 import { useQuery } from "react-query";
 import axios from "axios";
 
-const AiOutlinePlusCircle = lazyLoad("react-icons/ai", "AiOutlinePlusCircle");
+// const AiOutlinePlusCircle = lazyLoad("react-icons/ai", "AiOutlinePlusCircle");
 
 const FormPage = ({
   formTitle,

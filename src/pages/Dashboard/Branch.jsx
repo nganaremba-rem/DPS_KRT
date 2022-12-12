@@ -4,8 +4,9 @@ import { fetchBranches } from "../../api/Api";
 import { Loading } from "../../components";
 import MainSkeleton from "../../components/MainSkeleton";
 import { lazyLoad } from "../../lazyLoad";
+import { ReactTable } from "../../components/ReactTable";
 
-const ReactTable = lazyLoad("./components/ReactTable", "ReactTable");
+// const ReactTable = lazyLoad("./components/ReactTable", "ReactTable");
 
 const Branch = () => {
   const {

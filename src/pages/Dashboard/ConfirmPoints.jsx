@@ -6,9 +6,9 @@ import MainSkeleton from "../../components/MainSkeleton";
 import { useStateContext } from "../../context/ContextProvider";
 import { lazyLoad } from "../../lazyLoad";
 import EditPage from "./EditPage";
-// import { ReactTable } from "../../components/ReactTable";
+import { ReactTable } from "../../components/ReactTable";
 
-const ReactTable = lazyLoad("./components/ReactTable", "ReactTable");
+// const ReactTable = lazyLoad("./components/ReactTable", "ReactTable");
 
 const ConfirmPoints = () => {
   const { openModal, setOpenModal } = useStateContext();

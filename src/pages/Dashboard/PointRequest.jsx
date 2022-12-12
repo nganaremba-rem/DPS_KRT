@@ -3,9 +3,9 @@ import { useQuery } from "react-query";
 import { fetchPointsRequested } from "../../api/Api";
 import MainSkeleton from "../../components/MainSkeleton";
 import { lazyLoad } from "../../lazyLoad";
-// import { ReactTable } from "../../components/ReactTable";
+import { ReactTable } from "../../components/ReactTable";
 
-const ReactTable = lazyLoad("./components/ReactTable", "ReactTable");
+// const ReactTable = lazyLoad("./components/ReactTable", "ReactTable");
 
 const PointRequest = () => {
   const {
