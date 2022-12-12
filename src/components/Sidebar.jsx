@@ -1,10 +1,10 @@
 import React from "react";
+import { useEffect } from "react";
 import { DiJqueryLogo } from "react-icons/di";
 import { IoIosCloseCircleOutline } from "react-icons/io";
 import { useQuery } from "react-query";
 import { fetchMenus } from "../api/Api";
 import { useStateContext } from "../context/ContextProvider";
-import Loading from "./Loading";
 import MenuGroup from "./MenuGroup";
 import MenuItem from "./MenuItem";
 import MenuSkeleton from "./MenuSkeleton";
@@ -58,18 +58,24 @@ const MenuItems = ({ closeSidebar }) => {
     data: menuData,
   } = useQuery("menu", fetchMenus);
 
+  // check menusResponse
+  useEffect(() => {
+    menuData !== undefined && console.log(menuData);
+  }, [menuData]);
+
   if (isLoading) return <MenuSkeleton />;
   if (isError) return <h1>{error?.message}</h1>;
 
-  return menuData.data.map((menuItem) => {
+  return menuData?.data?.response.map((menuItem) => {
     return (
-      <MenuGroup key={menuItem.name} name={menuItem.name}>
-        {menuItem.operations.map((operation) => {
+      <MenuGroup key={menuItem?.name} name={menuItem?.name}>
+        {menuItem?.operation.map((operation) => {
+          const to = operation.to.toLowerCase().replace(/\s/g, "");
           return (
             <MenuItem
-              name={operation.name}
-              to={operation.to}
-              key={operation.name}
+              name={operation?.name}
+              to={to}
+              key={operation?.name}
               custFnc={closeSidebar}
             />
           );

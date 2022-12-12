@@ -3,7 +3,10 @@ import { useQuery } from "react-query";
 import { fetchEmployees } from "../../api/Api";
 import { Loading } from "../../components";
 import MainSkeleton from "../../components/MainSkeleton";
-import { ReactTable } from "../../components/ReactTable";
+import { lazyLoad } from "../../lazyLoad";
+// import { ReactTable } from "../../components/ReactTable";
+
+const ReactTable = lazyLoad("./components/ReactTable", "ReactTable");
 
 const Employee = () => {
   const {

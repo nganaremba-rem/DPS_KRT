@@ -1,6 +1,7 @@
 import React from "react";
 import { NavLink } from "react-router-dom";
-import { GiBulletImpacts } from "react-icons/gi";
+import { FcSettings } from "react-icons/fc";
+import { lazyLoad } from "../lazyLoad";
 
 const MenuItem = ({ name, custFnc, to, icon }) => {
   const linkClass = `menu-items cursor-pointer rounded-lg px-3 py-2 w-full  flex gap-4  items-center `;
@@ -15,7 +16,7 @@ const MenuItem = ({ name, custFnc, to, icon }) => {
       }
       title={name}
     >
-      <div className="icon">{icon || <GiBulletImpacts size={25} />}</div>
+      <div className="icon">{icon || <FcSettings size={25} />}</div>
       <button className="font-bold whitespace-nowrap overflow-hidden text-ellipsis">
         {name}
       </button>

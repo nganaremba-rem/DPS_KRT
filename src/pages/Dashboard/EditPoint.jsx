@@ -5,8 +5,11 @@ import { fetchPoints } from "../../api/Api";
 import { Loading } from "../../components";
 import TextField from "../../components/Form/TextField";
 import MainSkeleton from "../../components/MainSkeleton";
-import { ReactTable } from "../../components/ReactTable";
+// import { ReactTable } from "../../components/ReactTable";
 import { useStateContext } from "../../context/ContextProvider";
+import { lazyLoad } from "../../lazyLoad";
+
+const ReactTable = lazyLoad("./components/ReactTable", "ReactTable");
 
 const Point = () => {
   const [userDetail, setUserDetail] = useState();

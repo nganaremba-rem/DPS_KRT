@@ -1,6 +1,6 @@
 import { createContext, useContext, useState } from "react";
 
-const StateContext = createContext();
+const StateContext = createContext({});
 
 const initialState = {
   notification: false,

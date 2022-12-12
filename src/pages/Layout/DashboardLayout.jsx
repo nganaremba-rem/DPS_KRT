@@ -1,7 +1,8 @@
-import React from "react";
+import React, { Suspense } from "react";
 import { Outlet } from "react-router-dom";
 import { Navbar, Sidebar } from "../../components";
 import { useStateContext } from "../../context/ContextProvider";
+import MainSkeleton from "../../components/MainSkeleton";
 
 const DashboardLayout = ({ children, ...props }) => {
   const { activeSidebar } = useStateContext();
@@ -15,7 +16,9 @@ const DashboardLayout = ({ children, ...props }) => {
       >
         <Navbar />
         <div className="p-5 flex justify-center  items-center">
-          <Outlet />
+          <Suspense fallback={<MainSkeleton />}>
+            <Outlet />
+          </Suspense>
         </div>
       </div>
     </>

@@ -1,21 +1,53 @@
 import axios from "axios";
 import { endpoints } from "../endpoints";
 
+// MAIN FETCH API
 export const getAPI = async (url) => {
   const response = await fetch(url);
   const data = await response.json();
   return data;
 };
 
-// MAIN FETCH API
+// ! BASE URL
+const baseURL = "http://localhost:4001";
+// const baseURL = "http://burn.pagekite.me";
+const devBaseURL = "http://localhost:4000";
+
+//  ? GET REQUEST
 
 export const fetchData = (url) => {
-  return axios.get(url);
+  return axios.get(url, {
+    baseURL: devBaseURL,
+  });
 };
 
-// user login response
-export const fetchUserOptions = () => fetchData(endpoints.userOptions);
+//  ? POST REQUEST
 
+export const postData = (data, url) => {
+  return axios
+    .post(url, data, {
+      headers: {
+        "Content-Type": "application/json",
+      },
+      baseURL: baseURL,
+    })
+    .then((res) => res)
+    .catch((err) => err);
+};
+
+// DELETE Request
+
+const deleteRequest = (url) => {
+  return axios.delete(url, {
+    baseURL: baseURL,
+  });
+};
+
+//  Request functions
+
+// ! GET REQUEST
+// user menu
+export const fetchUserOptions = () => fetchData(endpoints.userOptions);
 export const fetchEmployees = () => fetchData(endpoints.employees);
 export const fetchMenus = () => fetchData(endpoints.menu);
 export const fetchPoints = () => fetchData(endpoints.points);
@@ -27,21 +59,18 @@ export const fetchPointsEarnedByDrivers = () =>
 export const fetchPointsReqHistory = () => fetchData(endpoints.pointReqHistory);
 export const fetchPointsRequested = () => fetchData(endpoints.pointsRequested);
 
-// Creation
+// FETCH DATA FOR CREATION
 export const createEmployee = () => fetchData(endpoints.createEmp);
 export const createBranch = () => fetchData(endpoints.createBranch);
 export const createRole = () => fetchData(endpoints.createRole);
 export const givePoint = () => fetchData(endpoints.givePoint);
+export const creditPoint = () => fetchData(endpoints.creditPoint);
+export const pointRequestFromBM = () => fetchData(endpoints.pointRequestFromBM);
 
-//  POST REQUEST
-
-export const postData = (data, url) => {
-  return axios.post(url, data, {
-    headers: {
-      "Content-Type": "application/json",
-      Authorization: "Bearer token_aifjkk^Kjekasdf",
-    },
-  });
-};
+// ! POST request functions
 
 export const LoginFn = (data) => postData(data, endpoints.login);
+
+// ! DELETE request functions
+
+export const LogoutFn = () => deleteRequest(endpoints.logout);

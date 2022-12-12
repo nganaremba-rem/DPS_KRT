@@ -4,9 +4,12 @@ import { useQuery } from "react-query";
 import { fetchRoles } from "../../api/Api";
 import { Loading } from "../../components";
 import MainSkeleton from "../../components/MainSkeleton";
-import { ReactTable } from "../../components/ReactTable";
+// import { ReactTable } from "../../components/ReactTable";
 import { useStateContext } from "../../context/ContextProvider";
+import { lazyLoad } from "../../lazyLoad";
 import EditPage from "./EditPage";
+
+const ReactTable = lazyLoad("./components/ReactTable", "ReactTable");
 
 const EditRole = () => {
   const { openModal, setOpenModal } = useStateContext();

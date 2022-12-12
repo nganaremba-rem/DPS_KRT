@@ -3,9 +3,11 @@ import { useQuery } from "react-query";
 import { fetchPoints } from "../../api/Api";
 import { Loading } from "../../components";
 import MainSkeleton from "../../components/MainSkeleton";
-import { ReactTable } from "../../components/ReactTable";
+import { lazyLoad } from "../../lazyLoad";
+// import { ReactTable } from "../../components/ReactTable";
+const ReactTable = lazyLoad("./components/ReactTable", "ReactTable");
 
-const Point = () => {
+const Points = () => {
   const {
     isLoading,
     isError,
@@ -34,4 +36,4 @@ const Point = () => {
   return <ReactTable columns={columns} data={data} tableName={"Points"} />;
 };
 
-export default Point;
+export default Points;

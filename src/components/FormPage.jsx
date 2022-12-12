@@ -1,10 +1,15 @@
 import { Button } from "@mui/material";
 import React, { useEffect, useState } from "react";
-import { AiOutlinePlusCircle } from "react-icons/ai";
+// import { AiOutlinePlusCircle } from "react-icons/ai";
 import { getAPI } from "../api/Api";
 import { endpoints } from "../endpoints";
+import { lazyLoad } from "../lazyLoad";
 import SelectOption from "./Form/SelectOption";
 import TextField from "./Form/TextField";
+import { useQuery } from "react-query";
+import axios from "axios";
+
+const AiOutlinePlusCircle = lazyLoad("react-icons/ai", "AiOutlinePlusCircle");
 
 const FormPage = ({
   formTitle,
@@ -23,6 +28,12 @@ const FormPage = ({
         label: singleData["Employee Name"],
         value: singleData.Username,
       };
+    });
+  };
+
+  const fetchOptions = (queryName, endpoint) => {
+    return useQuery(queryName, () => {
+      return axios.get(endpoint);
     });
   };
 
@@ -49,7 +60,13 @@ const FormPage = ({
           }
 
           if (input.type === "select") {
-            let options;
+            {
+              /* let { data: options } = fetchOptions("creditPoint", input.endPoint); */
+            }
+            {
+              /* console.log(options.data); */
+            }
+            let options = [];
             switch (input.id) {
               case "branchOfficeCode":
                 break;
@@ -64,13 +81,14 @@ const FormPage = ({
               default:
                 break;
             }
+
             return (
               <SelectOption
                 id={input.id}
                 name={input.name}
                 key={input.name}
                 label={input.field}
-                options={options}
+                options={options ?? (options || {})}
               />
             );
           }

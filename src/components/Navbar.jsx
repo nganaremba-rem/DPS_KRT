@@ -1,20 +1,35 @@
-import React, { useEffect, useState } from "react";
+import Button from "@mui/material/Button";
+import axios from "axios";
+import React, { Suspense, useEffect } from "react";
 import { AiOutlineHome } from "react-icons/ai";
 import { CgMenuLeft } from "react-icons/cg";
 import { FaRegUserCircle } from "react-icons/fa";
 import { IoMdNotificationsOutline } from "react-icons/io";
-import { useQuery } from "react-query";
+import { useMutation, useQuery } from "react-query";
 import { Link, useNavigate } from "react-router-dom";
-import { fetchUserOptions } from "../api/Api";
+import { fetchUserOptions, LogoutFn } from "../api/Api";
 import { useStateContext } from "../context/ContextProvider";
+import useAuth from "../hooks/useAuth";
+import { lazyLoad } from "../lazyLoad";
 import Dropdown from "./Dropdown";
+import NavbarSkeleton from "./NavbarSkeleton";
 import NavButton from "./NavButton";
 import Notification from "./Notification";
-import Button from "@mui/material/Button";
-import NavbarSkeleton from "./NavbarSkeleton";
+
+// const Notification = lazyLoad("./components/Notification");
 
 const Navbar = () => {
   const { setActiveSidebar, screenSize, setScreenSize } = useStateContext();
+  const { user, setUser } = useAuth();
+
+  const {
+    isLoading: logoutIsLoading,
+    isError: logoutIsError,
+    error: logoutError,
+    mutate,
+  } = useMutation({
+    mutationFn: LogoutFn,
+  });
 
   const {
     data: userOptions,
@@ -42,13 +57,39 @@ const Navbar = () => {
   }, [screenSize]);
 
   const handleLogout = () => {
-    if (confirm("Logout?")) {
-      navigate("/");
-    }
+    mutate(
+      {},
+      {
+        onSuccess: (data) => {
+          if (data.data === "Logout Successfully") {
+            setUser(null);
+            localStorage.removeItem("user");
+            navigate("/");
+          }
+        },
+      },
+    );
   };
 
   if (isLoading) return <NavbarSkeleton />;
   if (isError) return <h1>{error.message}</h1>;
+
+  // for test purpose
+  const testAPI = () => {
+    axios
+      .get("/getUiMenu", {
+        baseURL: "http://burn.pagekite.me",
+        headers: {
+          userId: "p1234",
+        },
+        params: {
+          ctryCode: "IN",
+          langCode: "EN",
+        },
+      })
+      .then((data) => console.log(data))
+      .catch((err) => console.log(err.message));
+  };
 
   // return <NavbarSkeleton />;
 
@@ -66,6 +107,7 @@ const Navbar = () => {
           />
         </div>
         <div className="flex items-center">
+          <Button onClick={testAPI}>TEST API</Button>
           <Link to={"/dashboard"}>
             <NavButton icon={<AiOutlineHome size={27} color="#36c1e3" />} />
           </Link>
@@ -89,21 +131,26 @@ const Navbar = () => {
             <Dropdown>
               <div className="flex flex-col gap-2 p-2">
                 <div className="font-extrabold bg-slate-300 py-2 px-3  rounded-lg text-gray-600">
-                  Admin
+                  {user?.roleCd?.roleNm}
                 </div>
                 <div
-                  title="Shijagurumayum Nganaremba Sharma"
+                  title={user?.userGivnm}
                   className="whitespace-nowrap max-w-[20rem] overflow-hidden text-ellipsis text-lg text-gray-500"
                 >
-                  Shijagurumayum Nganaremba Sharma
+                  {`${user?.userSurnm}  ${user?.userGivnm}`}
                 </div>
-                <Button
-                  onClick={handleLogout}
-                  variant="contained"
-                  color="error"
-                >
-                  Logout
-                </Button>
+
+                {logoutIsLoading ? (
+                  <div>Loading...</div>
+                ) : (
+                  <Button
+                    onClick={handleLogout}
+                    variant="contained"
+                    color="error"
+                  >
+                    Logout
+                  </Button>
+                )}
               </div>
             </Dropdown>
           </NavButton>

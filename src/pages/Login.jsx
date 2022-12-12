@@ -1,5 +1,4 @@
-import React, { useReducer } from "react";
-import { useState } from "react";
+import React, { useReducer, useState } from "react";
 import { FaUserCircle } from "react-icons/fa";
 import { RiLockPasswordFill } from "react-icons/ri";
 import { useMutation } from "react-query";
@@ -7,9 +6,10 @@ import { useNavigate } from "react-router-dom";
 import { PulseLoader } from "react-spinners";
 import { LoginFn } from "../api/Api";
 import TextInput from "../components/Form/TextInput";
+import useAuth from "../hooks/useAuth";
 
 // Reducer state initial state
-const initialialState = {
+const initialState = {
   username: "",
   password: "",
   id: "",
@@ -46,11 +46,14 @@ const Login = () => {
     mutationFn: LoginFn,
   });
 
+  const { setUser } = useAuth();
+
+  // custom states
   const [formError, setFormError] = useState(null);
   const [isFormError, setIsFormError] = useState(false);
   const navigate = useNavigate();
-
-  const [formStates, dispatch] = useReducer(reducer, initialialState);
+  // reducer
+  const [formStates, dispatch] = useReducer(reducer, initialState);
 
   const handleLogin = (e) => {
     e.preventDefault();
@@ -65,7 +68,19 @@ const Login = () => {
     // ! need to remove this line
     dispatch({ type: "setId" }); // adding id for json-server only
     mutate(formStates, {
-      onSuccess: () => navigate("/dashboard"),
+      // onSuccess: () => navigate("/dashboard"),
+      onError: (error) => console.log(error),
+      onSuccess: (data) => {
+        console.log(data);
+        if (data.data.error) {
+          setIsFormError(true);
+          setFormError(data.data.message);
+        } else {
+          setUser(data?.data?.response);
+          localStorage.setItem("user", JSON.stringify(data?.data?.response));
+          navigate("/dashboard");
+        }
+      },
     });
   };
 
