@@ -41,7 +41,7 @@
 // };
 
 export const endpoints = {
-  baseUrl: "http://localhost:4000",
+  baseUrl: "https://krt-backend-json-server-production-5cc1.up.railway.app",
   employees: "/users",
   menu: "/menu",
   points: "/points",
