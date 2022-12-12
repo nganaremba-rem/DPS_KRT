@@ -9,15 +9,17 @@ export const getAPI = async (url) => {
 };
 
 // ! BASE URL
-const baseURL = "http://localhost:4001";
+// const baseURL = "http://localhost:4001";
 // const baseURL = "http://burn.pagekite.me";
-const devBaseURL = "http://localhost:4000";
+const postURL = "https://krt-node-server-production.up.railway.app";
+const baseURL =
+  "https://krt-backend-json-server-production-5cc1.up.railway.app";
 
 //  ? GET REQUEST
 
 export const fetchData = (url) => {
   return axios.get(url, {
-    baseURL: devBaseURL,
+    baseURL: baseURL,
   });
 };
 
@@ -29,7 +31,7 @@ export const postData = (data, url) => {
       headers: {
         "Content-Type": "application/json",
       },
-      baseURL: baseURL,
+      baseURL: postURL,
     })
     .then((res) => res)
     .catch((err) => err);

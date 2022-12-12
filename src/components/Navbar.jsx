@@ -77,16 +77,24 @@ const Navbar = () => {
   // for test purpose
   const testAPI = () => {
     axios
-      .get("/getUiMenu", {
-        baseURL: "http://burn.pagekite.me",
-        headers: {
-          userId: "p1234",
+      .post(
+        "/auth/login",
+        {
+          mailAddress: "admin01@gmail.com",
+          password: "password",
         },
-        params: {
-          ctryCode: "IN",
-          langCode: "EN",
+        {
+          baseURL: "http://burn.pagekite.me",
+          // baseURL: "https://krt-node-server-production.up.railway.app/",
+          // headers: {
+          //   userId: "p1234",
+          // },
+          // params: {
+          //   ctryCode: "IN",
+          //   langCode: "EN",
+          // },
         },
-      })
+      )
       .then((data) => console.log(data))
       .catch((err) => console.log(err.message));
   };
