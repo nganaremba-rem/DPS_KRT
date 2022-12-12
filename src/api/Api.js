@@ -11,7 +11,7 @@ export const getAPI = async (url) => {
 // ! BASE URL
 // const baseURL = "http://localhost:4001";
 // const baseURL = "http://burn.pagekite.me";
-const postURL = "https://krt-node-server-production.up.railway.app";
+const postURL = "https://krt-node-server-production-695a.up.railway.app/";
 const baseURL =
   "https://krt-backend-json-server-production-5cc1.up.railway.app";
 
