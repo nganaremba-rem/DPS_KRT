@@ -115,7 +115,9 @@ const Navbar = () => {
           />
         </div>
         <div className="flex items-center">
-          <Button onClick={testAPI}>TEST API</Button>
+          <Button onClick={testAPI}>
+            TEST CORS ISSUE (CHECK browser console)
+          </Button>
           <Link to={"/dashboard"}>
             <NavButton icon={<AiOutlineHome size={27} color="#36c1e3" />} />
           </Link>
