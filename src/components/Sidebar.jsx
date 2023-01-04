@@ -1,9 +1,10 @@
 import React from "react";
 import { useEffect } from "react";
+import { AiOutlineHome } from "react-icons/ai";
 import { DiJqueryLogo } from "react-icons/di";
 import { IoIosCloseCircleOutline } from "react-icons/io";
 import { useQuery } from "react-query";
-import { NavLink } from "react-router-dom";
+import { Link, NavLink } from "react-router-dom";
 import { fetchMenus } from "../api/Api";
 import { useStateContext } from "../context/ContextProvider";
 import useAuth from "../hooks/useAuth";
@@ -44,6 +45,13 @@ const Sidebar = () => {
 
         <section className="max-h-full overflow-auto px-3 pb-14 relative">
           <div className="mb-10">
+            <NavLink
+              className={`text-gray-700 sticky hover:bg-slate-300 bg-slate-200 top-0 gap-2  px-2 py-1 items-center  flex font-bold  flex-1 mt-2 shadow-lg rounded-lg`}
+              to={"/dashboard"}
+            >
+              <AiOutlineHome size={24} color="#36c1e3" />
+              <div className="text-center mt-1">Dashboard Home</div>
+            </NavLink>
             <MenuItems closeSidebar={closeSidebar} />
           </div>
         </section>
