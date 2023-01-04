@@ -5,27 +5,30 @@ import { Loading } from "../../components";
 import MainSkeleton from "../../components/MainSkeleton";
 import { lazyLoad } from "../../lazyLoad";
 import { ReactTable } from "../../components/ReactTable";
+import useAuth from "../../hooks/useAuth";
+import { useEffect } from "react";
+import { getTableCols, getTableData } from "../../reactTableFn";
 
 // const ReactTable = lazyLoad("./components/ReactTable", "ReactTable");
 
 const Employee = () => {
-  const {
-    isLoading,
-    isError,
-    error,
-    data: employees,
-  } = useQuery("employee", fetchEmployees);
-
   // REACT-TABLE setting columns and data
-  const columns = useMemo(
-    () =>
-      employees &&
-      Object.keys(employees?.data[0]).map((key) => {
-        if (key === "Active State") {
-          return {
-            Header: key,
-            accessor: key,
-            Cell: ({ value }) => {
+  try {
+    const { user } = useAuth();
+    const {
+      isLoading,
+      isError,
+      error,
+      data: employees,
+    } = useQuery("employee", () => fetchEmployees(user.userId));
+
+    const columns = useMemo(
+      () =>
+        employees?.data?.response &&
+        getTableCols(employees.data?.response, [
+          {
+            key: "Active State",
+            cell: ({ value }) => {
               const bgColor = value ? "bg-green-500" : "bg-slate-500";
               return (
                 <div className="flex justify-center items-center">
@@ -35,12 +38,10 @@ const Employee = () => {
                 </div>
               );
             },
-          };
-        } else if (key === "Face Photo") {
-          return {
-            Header: key,
-            accessor: key,
-            Cell: ({ value }) => (
+          },
+          {
+            key: "Face Photo",
+            cell: ({ value }) => (
               <div className="w-12 h-12 overflow-hidden  rounded-full">
                 <img
                   onClick={() => window.open(value)}
@@ -53,27 +54,28 @@ const Employee = () => {
                 />
               </div>
             ),
-          };
-        }
-        return {
-          Header: key,
-          accessor: key,
-        };
-      }),
-    [employees?.data],
-  );
+          },
+        ]),
+      [employees?.data?.response],
+    );
 
-  const tableData = useMemo(
-    () => employees && [...employees?.data],
-    [employees?.data],
-  );
+    const tableData = useMemo(
+      () =>
+        employees?.data?.response && getTableData(employees?.data?.response),
+      [employees?.data?.response],
+    );
 
-  if (isLoading) return <MainSkeleton />;
-  if (isError) return <h1>{error.message}</h1>;
+    if (isLoading) return <MainSkeleton />;
+    if (isError) return <h1>{error.message}</h1>;
 
-  return (
-    <ReactTable columns={columns} data={tableData} tableName={"Employees"} />
-  );
+    return (
+      // <></>
+      <ReactTable columns={columns} data={tableData} tableName={"Employees"} />
+    );
+  } catch (err) {
+    console.log(err);
+    return <>Error</>;
+  }
 };
 
 export default Employee;

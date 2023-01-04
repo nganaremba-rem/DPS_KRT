@@ -74,7 +74,7 @@ export const ReactTable = ({
             {...getTableProps()}
             className="rounded-xl shadow overflow-hidden w-full"
           >
-            <thead className="select-none bg-slate-300 text-gray-600">
+            <thead className="select-none  bg-slate-300 text-gray-600">
               {headerGroups.map((headerGroup) => {
                 return (
                   <tr {...headerGroup.getHeaderGroupProps()}>

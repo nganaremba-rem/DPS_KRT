@@ -6,7 +6,7 @@ import { CgMenuLeft } from "react-icons/cg";
 import { FaRegUserCircle } from "react-icons/fa";
 import { IoMdNotificationsOutline } from "react-icons/io";
 import { useMutation, useQuery } from "react-query";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, redirect, useNavigate } from "react-router-dom";
 import { fetchUserOptions, LogoutFn } from "../api/Api";
 import { useStateContext } from "../context/ContextProvider";
 import useAuth from "../hooks/useAuth";
@@ -31,12 +31,18 @@ const Navbar = () => {
     mutationFn: LogoutFn,
   });
 
-  const {
-    data: userOptions,
-    isLoading,
-    isError,
-    error,
-  } = useQuery("userOptions", fetchUserOptions);
+  const userOptions = {
+    data: {
+      options: [{ name: "Notification" }],
+    },
+  };
+
+  // const {
+  //   data: userOptions,
+  //   isLoading,
+  //   isError,
+  //   error,
+  // } = useQuery("userOptions", fetchUserOptions);
 
   const navigate = useNavigate();
 
@@ -52,27 +58,30 @@ const Navbar = () => {
   }, []);
 
   useEffect(() => {
-    if (screenSize < 900) setActiveSidebar(false);
+    if (screenSize < 1025) setActiveSidebar(false);
     else setActiveSidebar(true);
   }, [screenSize]);
 
   const handleLogout = () => {
-    mutate(
-      {},
-      {
-        onSuccess: (data) => {
-          if (data.data === "Logout Successfully") {
-            setUser(null);
-            localStorage.removeItem("user");
-            navigate("/");
-          }
-        },
-      },
-    );
+    localStorage.removeItem("user");
+    setUser(null);
+    navigate("/");
+    // mutate(
+    //   {},
+    //   {
+    //     onSuccess: (data) => {
+    //       if (data.data === "Logout Successfully") {
+    //         setUser(null);
+    //         localStorage.removeItem("user");
+    //         navigate("/");
+    //       }
+    //     },
+    //   },
+    // );
   };
 
-  if (isLoading) return <NavbarSkeleton />;
-  if (isError) return <h1>{error.message}</h1>;
+  // if (isLoading) return <NavbarSkeleton />;
+  // if (isError) return <h1>{error.message}</h1>;
 
   // for test purpose
   const testAPI = () => {
@@ -115,9 +124,9 @@ const Navbar = () => {
           />
         </div>
         <div className="flex items-center">
-          <Button onClick={testAPI}>
+          {/* <Button onClick={testAPI}>
             TEST CORS ISSUE (CHECK browser console)
-          </Button>
+          </Button> */}
           <Link to={"/dashboard"}>
             <NavButton icon={<AiOutlineHome size={27} color="#36c1e3" />} />
           </Link>
@@ -144,10 +153,10 @@ const Navbar = () => {
                   {user?.roleCd?.roleNm}
                 </div>
                 <div
-                  title={user?.userGivnm}
+                  title={user?.userName + user?.userSurnm}
                   className="whitespace-nowrap max-w-[20rem] overflow-hidden text-ellipsis text-lg text-gray-500"
                 >
-                  {`${user?.userSurnm}  ${user?.userGivnm}`}
+                  {`${user?.userName}  ${user?.userSurnm}`}
                 </div>
 
                 {logoutIsLoading ? (

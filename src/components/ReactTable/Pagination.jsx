@@ -42,7 +42,7 @@ export const Pagination = ({
         <div className="goto-area shrink-0 text-slate-600 flex gap-2 items-center">
           <label htmlFor="goto">Goto Page</label>
           <input
-            className="min-w-fit rounded px-5 py-1 flex items-center border-slate-300 border outline-none focus:ring"
+            className="w-[5rem] rounded p-1 flex items-center justify-center border-slate-300 border outline-none focus:ring"
             defaultValue={pageIndex + 1}
             onChange={(e) =>
               e.target.value && gotoPage(Number(e.target.value - 1))
@@ -53,7 +53,7 @@ export const Pagination = ({
           />
         </div>
         <select
-          className="p-3 rounded-lg focus:ring outline-none"
+          className="p-2 rounded-lg focus:ring outline-none"
           value={pageSize}
           onChange={(e) => setPageSize(Number(e.target.value))}
           name="pageSize"

@@ -1,16 +1,16 @@
-import { createContext, useEffect } from "react";
+import { createContext, useEffect, useMemo } from "react";
 import { useState } from "react";
 
 export const AuthContext = createContext({});
 
 const AuthProvider = ({ children }) => {
   const [user, setUser] = useState();
-  const userId = localStorage.getItem("user");
-  const data = JSON.parse(userId);
+  const userDataString = localStorage.getItem("user");
+  const userData = useMemo(() => JSON.parse(userDataString), []);
 
   useEffect(() => {
-    setUser(data);
-  }, [userId]);
+    setUser(userData);
+  }, [userData]);
 
   return (
     <AuthContext.Provider value={{ user, setUser }}>

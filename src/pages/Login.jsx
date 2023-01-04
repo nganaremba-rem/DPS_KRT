@@ -10,7 +10,7 @@ import useAuth from "../hooks/useAuth";
 
 // Reducer state initial state
 const initialState = {
-  username: "",
+  mailAddress: "",
   password: "",
   id: "",
 };
@@ -26,7 +26,7 @@ const Actions = {
 function reducer(state, action) {
   switch (action.type) {
     case Actions.setUsername:
-      return { ...state, username: action.payload };
+      return { ...state, mailAddress: action.payload };
     case Actions.setPassword:
       return { ...state, password: action.payload };
     case Actions.setId:
@@ -71,11 +71,11 @@ const Login = () => {
       // onSuccess: () => navigate("/dashboard"),
       onError: (error) => console.log(error),
       onSuccess: (data) => {
-        console.log(data);
-        if (data.data.error) {
+        // console.log(data);
+        if (data.data.status.code === "500") {
           setIsFormError(true);
-          setFormError(data.data.message);
-        } else {
+          setFormError(data.data.status.message);
+        } else if (data.data.status.code === "200") {
           setUser(data?.data?.response);
           localStorage.setItem("user", JSON.stringify(data?.data?.response));
           navigate("/dashboard");
@@ -112,7 +112,7 @@ const Login = () => {
               }
               icon={<FaUserCircle color="#444" size={25} />}
               label="Username"
-              name={"username"}
+              name={"mailAddress"}
             />
             <TextInput
               onChange={(e) =>

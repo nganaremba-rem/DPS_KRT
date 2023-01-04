@@ -5,35 +5,39 @@ import { Loading } from "../../components";
 import MainSkeleton from "../../components/MainSkeleton";
 import { lazyLoad } from "../../lazyLoad";
 import { ReactTable } from "../../components/ReactTable";
+import useAuth from "../../hooks/useAuth";
+import { getTableCols, getTableData } from "../../reactTableFn";
 // const ReactTable = lazyLoad("./components/ReactTable", "ReactTable");
 
 const Role = () => {
-  const {
-    isLoading,
-    isError,
-    data: roles,
-    error,
-  } = useQuery("roles", fetchRoles);
+  try {
+    const { user } = useAuth();
+    const {
+      isLoading,
+      isError,
+      data: roles,
+      error,
+    } = useQuery("roles", () => fetchRoles(user.userId));
 
-  // REACT-TABLE settting columns and data
-  const columns = useMemo(
-    () =>
-      roles &&
-      Object.keys(roles.data[0]).map((key) => {
-        return {
-          Header: key,
-          accessor: key,
-        };
-      }),
-    [roles?.data],
-  );
+    // REACT-TABLE settting columns and data
+    const columns = useMemo(
+      () => roles?.data && getTableCols(roles.data),
+      [roles?.data],
+    );
 
-  const data = useMemo(() => roles && [...roles?.data], [roles?.data]);
+    const data = useMemo(
+      () => roles?.data && getTableData(roles.data),
+      [roles?.data],
+    );
 
-  if (isLoading) return <MainSkeleton />;
-  if (isError) return <h1>{error?.message}</h1>;
+    if (isLoading) return <MainSkeleton />;
+    if (isError) return <h1>{error?.message}</h1>;
 
-  return <ReactTable columns={columns} data={data} tableName={"Roles"} />;
+    return <ReactTable columns={columns} data={data} tableName={"Roles"} />;
+  } catch (err) {
+    console.error(err);
+    return <>ERROR</>;
+  }
 };
 
 export default Role;

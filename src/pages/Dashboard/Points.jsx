@@ -5,35 +5,44 @@ import { Loading } from "../../components";
 import MainSkeleton from "../../components/MainSkeleton";
 import { lazyLoad } from "../../lazyLoad";
 import { ReactTable } from "../../components/ReactTable";
+import useAuth from "../../hooks/useAuth";
+import { getTableCols, getTableData } from "../../reactTableFn";
 // const ReactTable = lazyLoad("./components/ReactTable", "ReactTable");
 
 const Points = () => {
-  const {
-    isLoading,
-    isError,
-    error,
-    data: points,
-  } = useQuery("points", fetchPoints);
+  try {
+    const { user } = useAuth();
+    console.log("====================================");
+    console.log(user);
+    console.log("====================================");
+    const {
+      isLoading,
+      isError,
+      error,
+      data: points,
+    } = useQuery("points", () =>
+      fetchPoints({ userId: user.userId, branchCode: user.divCd.divCd }),
+    );
 
-  // REACT-TABLE settting columns and data
-  const columns = useMemo(
-    () =>
-      points &&
-      Object.keys(points.data[0]).map((key) => {
-        return {
-          Header: key,
-          accessor: key,
-        };
-      }),
-    [points?.data],
-  );
+    // REACT-TABLE settting columns and data
+    const columns = useMemo(
+      () => points?.data?.response && getTableCols(points.data.response),
+      [points?.data],
+    );
 
-  const data = useMemo(() => points && [...points.data], [points?.data]);
+    const data = useMemo(
+      () => points?.data?.response && getTableData(points?.data?.response),
+      [points?.data],
+    );
 
-  if (isLoading) return <MainSkeleton />;
-  if (isError) return <h1>{error?.message}</h1>;
+    if (isLoading) return <MainSkeleton />;
+    if (isError) return <h1>{error?.message}</h1>;
 
-  return <ReactTable columns={columns} data={data} tableName={"Points"} />;
+    return <ReactTable columns={columns} data={data} tableName={"Points"} />;
+  } catch (err) {
+    console.error(err);
+    return <>ERROR</>;
+  }
 };
 
 export default Points;

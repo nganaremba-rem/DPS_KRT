@@ -6,26 +6,34 @@ import Loading from "../../components/Loading";
 import MainSkeleton from "../../components/MainSkeleton";
 
 const GivePoint = () => {
-  const { data, isLoading, isError, error } = useQuery("givePoint", givePoint);
+  try {
+    const { data, isLoading, isError, error } = useQuery(
+      "givePoint",
+      givePoint,
+    );
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    console.log("ok");
-  };
+    const handleSubmit = (e) => {
+      e.preventDefault();
+      console.log("ok");
+    };
 
-  if (isLoading) return <MainSkeleton />;
-  if (isError) return <h1>{error.message}</h1>;
+    if (isLoading) return <MainSkeleton />;
+    if (isError) return <h1>{error.message}</h1>;
 
-  return (
-    <>
-      <FormPage
-        formFieldsData={data.data}
-        formTitle="Give Point"
-        submitBtnText={"Submit"}
-        custSubmitFnc={handleSubmit}
-      />
-    </>
-  );
+    return (
+      <>
+        <FormPage
+          formFieldsData={data.data}
+          formTitle="Give Point"
+          submitBtnText={"Submit"}
+          custSubmitFnc={handleSubmit}
+        />
+      </>
+    );
+  } catch (err) {
+    console.error(err);
+    return <>ERROR</>;
+  }
 };
 
 export default GivePoint;

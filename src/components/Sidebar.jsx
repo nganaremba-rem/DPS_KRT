@@ -3,8 +3,10 @@ import { useEffect } from "react";
 import { DiJqueryLogo } from "react-icons/di";
 import { IoIosCloseCircleOutline } from "react-icons/io";
 import { useQuery } from "react-query";
+import { NavLink } from "react-router-dom";
 import { fetchMenus } from "../api/Api";
 import { useStateContext } from "../context/ContextProvider";
+import useAuth from "../hooks/useAuth";
 import MenuGroup from "./MenuGroup";
 import MenuItem from "./MenuItem";
 import MenuSkeleton from "./MenuSkeleton";
@@ -12,11 +14,11 @@ import MenuSkeleton from "./MenuSkeleton";
 const Sidebar = () => {
   const { activeSidebar, setActiveSidebar, screenSize } = useStateContext();
 
-  const sidebarWidth = activeSidebar ? "md:w-[30%] lg:w-[20%] w-[80%]" : "w-0";
+  const sidebarWidth = activeSidebar ? "md:w-[30%] lg:w-[20%] w-[60%]" : "w-0";
 
   // close sidebar for smaller devices
   const closeSidebar = () => {
-    if (screenSize < 900) setActiveSidebar(false);
+    if (screenSize < 1025) setActiveSidebar(false);
   };
 
   return (
@@ -40,8 +42,8 @@ const Sidebar = () => {
           </span>
         </div>
 
-        <section className="max-h-full overflow-auto p-3 pb-14">
-          <div className="mb-10 mt-7">
+        <section className="max-h-full overflow-auto px-3 pb-14 relative">
+          <div className="mb-10">
             <MenuItems closeSidebar={closeSidebar} />
           </div>
         </section>
@@ -51,17 +53,18 @@ const Sidebar = () => {
 };
 
 const MenuItems = ({ closeSidebar }) => {
+  const { user } = useAuth();
   const {
     isLoading,
     isError,
     error,
     data: menuData,
-  } = useQuery("menu", fetchMenus);
+  } = useQuery("menu", () => fetchMenus(user.userId));
 
   // check menusResponse
-  useEffect(() => {
-    menuData !== undefined && console.log(menuData);
-  }, [menuData]);
+  // useEffect(() => {
+  //   menuData !== undefined && console.log(menuData);
+  // }, [menuData]);
 
   if (isLoading) return <MenuSkeleton />;
   if (isError) return <h1>{error?.message}</h1>;

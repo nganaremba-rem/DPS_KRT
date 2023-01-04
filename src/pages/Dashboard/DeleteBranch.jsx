@@ -12,7 +12,7 @@ import { getTableCols, getTableData } from "../../reactTableFn";
 import EditPage from "./EditPage";
 // const ReactTable = lazyLoad("./components/ReactTable", "ReactTable");
 
-const EditBranch = () => {
+const DeleteBranch = () => {
   try {
     const { openModal, setOpenModal } = useStateContext();
     const [branchID, setBranchID] = useState();
@@ -40,19 +40,17 @@ const EditBranch = () => {
       hooks.visibleColumns.push((columns) => [
         ...columns,
         {
-          id: "Edit",
-          Header: "Edit",
+          id: "Delete",
+          Header: "Delete",
           Cell: ({ row }) => {
             return (
               <button
-                onClick={() => {
-                  console.log(row);
-                  setBranchID(row.values.id);
-                  setOpenModal(true);
-                }}
-                className="bg-violet-500 text-white px-5 py-2 rounded-full"
+                onClick={() =>
+                  window.confirm("Are you sure you want to delete?")
+                }
+                className="bg-red-700 text-white px-5 py-2 rounded-full"
               >
-                Edit
+                Delete
               </button>
             );
           },
@@ -84,4 +82,4 @@ const EditBranch = () => {
   }
 };
 
-export default EditBranch;
+export default DeleteBranch;

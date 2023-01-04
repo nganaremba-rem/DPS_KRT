@@ -3,7 +3,7 @@ import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 import "./App.css";
 import IsNotLogin from "./components/IsNotLogin";
 import RequireAuth from "./components/RequireAuth";
-import { lazyLoad } from "./lazyLoad";
+// import { lazyLoad } from "./lazyLoad";
 
 // const Branch = lazyLoad("./pages", "Branch");
 // const CreateBranch = lazyLoad("./pages", "CreateBranch");
@@ -49,6 +49,9 @@ import {
   CreditPoint,
   ConfirmPoints,
 } from "./pages";
+import DeleteBranch from "./pages/Dashboard/DeleteBranch";
+import DeleteEmployee from "./pages/Dashboard/DeleteEmployee";
+import DeleteRole from "./pages/Dashboard/DeleteRole";
 // import EditBranch from "./pages/Dashboard/EditBranch";
 // import EditEmployee from "./pages/Dashboard/EditEmployee";
 // import EditPage from "./pages/Dashboard/EditPage";
@@ -70,17 +73,20 @@ const App = () => {
               <Route path="employee">
                 <Route path="display" element={<Employee />} />
                 <Route path="create" element={<CreateEmployee />} />
-                <Route path="editDelete" element={<EditEmployee />} />
+                <Route path="edit" element={<EditEmployee />} />
+                <Route path="delete" element={<DeleteEmployee />} />
               </Route>
               <Route path="branch">
                 <Route path="display" element={<Branch />} />
                 <Route path="create" element={<CreateBranch />} />
-                <Route path="editDelete" element={<EditBranch />} />
+                <Route path="edit" element={<EditBranch />} />
+                <Route path="delete" element={<DeleteBranch />} />
               </Route>
               <Route path="role">
                 <Route path="display" element={<Role />} />
                 <Route path="create" element={<CreateRole />} />
-                <Route path="editDelete" element={<EditRole />} />
+                <Route path="edit" element={<EditRole />} />
+                <Route path="delete" element={<DeleteRole />} />
               </Route>
               <Route path="point">
                 <Route path="display" element={<Points />} />

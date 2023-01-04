@@ -13,7 +13,7 @@ import EditPage from "./EditPage";
 
 // const ReactTable = lazyLoad("./components/ReactTable", "ReactTable");
 
-const EditEmployee = () => {
+const DeleteEmployee = () => {
   try {
     const { setOpenModal, openModal } = useStateContext();
     const [editUserID, setEditUserID] = useState();
@@ -78,18 +78,17 @@ const EditEmployee = () => {
       hooks.visibleColumns.push((columns) => [
         ...columns,
         {
-          id: "Edit",
-          Header: "Edit",
+          id: "Delete",
+          Header: "Delete",
           Cell: ({ row }) => {
             return (
               <button
-                onClick={() => {
-                  setEditUserID(row.values.id);
-                  setOpenModal(true);
-                }}
-                className="bg-violet-500 text-white px-5 py-2 rounded-full"
+                onClick={() =>
+                  window.confirm("Are you sure you want to delete?")
+                }
+                className="bg-red-700 text-white px-5 py-2 rounded-full"
               >
-                Edit
+                Delete
               </button>
             );
           },
@@ -134,4 +133,4 @@ const EditEmployee = () => {
   }
 };
 
-export default EditEmployee;
+export default DeleteEmployee;

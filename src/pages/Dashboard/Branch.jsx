@@ -5,36 +5,38 @@ import { Loading } from "../../components";
 import MainSkeleton from "../../components/MainSkeleton";
 import { lazyLoad } from "../../lazyLoad";
 import { ReactTable } from "../../components/ReactTable";
+import useAuth from "../../hooks/useAuth";
+import { getTableCols, getTableData } from "../../reactTableFn";
 
 // const ReactTable = lazyLoad("./components/ReactTable", "ReactTable");
 
 const Branch = () => {
-  const {
-    isLoading,
-    isError,
-    data: branches,
-    error,
-  } = useQuery("branches", fetchBranches);
+  try {
+    const { user } = useAuth();
+    const {
+      isLoading,
+      isError,
+      data: branches,
+      error,
+    } = useQuery("branches", () => fetchBranches(user.userId));
 
-  // REACT-TABLE settting columns and data
-  const columns = useMemo(
-    () =>
-      branches &&
-      Object.keys(branches.data[0]).map((key) => {
-        return {
-          Header: key,
-          accessor: key,
-        };
-      }),
-    [branches?.data],
-  );
+    // REACT-TABLE settting columns and data
+    const columns = useMemo(() => {
+      if (branches?.data) return getTableCols(branches?.data);
+    }, [branches?.data]);
 
-  const data = useMemo(() => branches && [...branches.data], [branches?.data]);
+    const data = useMemo(() => {
+      if (branches?.data) return getTableData(branches?.data);
+    }, [branches?.data]);
 
-  if (isLoading) return <MainSkeleton />;
-  if (isError) return <h1>{error?.message}</h1>;
+    if (isLoading) return <MainSkeleton />;
+    if (isError) return <h1>{error?.message}</h1>;
 
-  return <ReactTable columns={columns} data={data} tableName={"Branches"} />;
+    return <ReactTable columns={columns} data={data} tableName={"Branches"} />;
+  } catch (err) {
+    console.error(err);
+    return <>Error</>;
+  }
 };
 
 export default Branch;
