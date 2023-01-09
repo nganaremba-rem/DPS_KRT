@@ -1,7 +1,15 @@
-import Select from "react-select";
+import AsyncSelect from "react-select/async";
 import React from "react";
 
-const SelectOption = ({ options, id, name, icon, label }) => {
+const SelectOption = ({
+  optionsFnc,
+  id,
+  name,
+  icon,
+  label,
+  formId,
+  required,
+}) => {
   return (
     <div className="grid  md:items-center outline-none focus:shadow-lg  md:gap-1 gap-1">
       <label
@@ -11,7 +19,15 @@ const SelectOption = ({ options, id, name, icon, label }) => {
         <div className="ico text-2xl">{icon}</div>
         <span>{label}</span>
       </label>
-      <Select options={options} className={"shadow-sm"} />
+      <AsyncSelect
+        name={name}
+        form={formId}
+        cacheOptions
+        loadOptions={optionsFnc}
+        defaultOptions
+        className={"shadow-sm"}
+        required={required}
+      />
     </div>
   );
 };

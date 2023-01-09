@@ -16,6 +16,10 @@ const postURL = "http://burn.pagekite.me";
 const baseURL = "http://burn.pagekite.me";
 // const baseURL = "http://localhost:4000";
 
+export const Axios = axios.create({
+  baseURL,
+});
+
 //  ? GET REQUEST
 
 export const fetchData = (url, options) => {
@@ -27,12 +31,10 @@ export const fetchData = (url, options) => {
 
 //  ? POST REQUEST
 
-export const postData = (data, url) => {
+export const postData = (data, url, options = {}) => {
   return axios
     .post(url, data, {
-      headers: {
-        "Content-Type": "application/json",
-      },
+      ...options,
       baseURL: postURL,
     })
     .then((res) => res)
@@ -171,7 +173,31 @@ export const pointRequestFromBM = (userId) =>
 
 // ! POST request functions
 
-export const LoginFn = (data) => postData(data, endpoints.login);
+export const LoginFn = (data) =>
+  postData(data, endpoints.login, {
+    headers: { "Content-Type": "application/json" },
+  });
+
+export const assignCreditPoint = (data, userId) =>
+  postData(data, endpoints.assignCreditPoint, {
+    params: {
+      ctryCode: "123",
+      langCode: "12",
+    },
+    headers: { "Content-Type": "application/json", userId },
+  });
+
+export const acceptPointRequest = (data, userId) =>
+  postData(data, endpoints.acceptPointRequest, {
+    params: {
+      ctryCode: "123",
+      langCode: "12",
+    },
+    headers: {
+      userId,
+      "Content-Type": "application/json",
+    },
+  });
 
 // ! DELETE request functions
 

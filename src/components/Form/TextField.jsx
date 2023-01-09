@@ -1,6 +1,15 @@
 import React from "react";
 
-const TextField = ({ label, name, placeholder, id, icon, type, value }) => {
+const TextField = ({
+  label,
+  name,
+  placeholder,
+  id,
+  icon,
+  type,
+  value,
+  required,
+}) => {
   return (
     <div className="grid  md:items-center outline-none focus:shadow-lg  md:gap-1 gap-1">
       <label
@@ -17,6 +26,7 @@ const TextField = ({ label, name, placeholder, id, icon, type, value }) => {
         id={id || name}
         placeholder={placeholder}
         defaultValue={value || ""}
+        required={required}
       />
     </div>
   );

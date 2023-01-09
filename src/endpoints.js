@@ -36,10 +36,12 @@ export const endpoints = {
   createRole: "/src/assets/CreateRole.json",
   givePoint: "/src/assets/GivePoint.json",
   creditPoint: "/src/assets/CreditPoints.json",
+  assignCreditPoint: "/points/creditPoints",
   userOptions: "/userOptions",
   pointRequestFromBM: "/pointRequestFromBM",
   login: "/auth/login",
   logout: "/logout",
+  acceptPointRequest: "/points/responseWithdrawRequest",
 };
 // export const endpoints = {
 //   baseUrl: "https://krt-backend-json-server-production-5cc1.up.railway.app",
