@@ -109,12 +109,22 @@ export const fetchBranchList = (userId) =>
   });
 export const fetchPointsEarnedByDrivers = (userId) =>
   fetchData(endpoints.pointsEarnedByDriver, {
+    params: {
+      ctryCode: "123",
+      langCode: "12",
+      brachCode: "B123",
+    },
     headers: {
       userId,
     },
   });
 export const fetchPointsReqHistory = (userId) =>
   fetchData(endpoints.pointReqHistory, {
+    params: {
+      ctryCode: "123",
+      langCode: "12",
+      brachCode: "591",
+    },
     headers: {
       userId,
     },
@@ -122,8 +132,8 @@ export const fetchPointsReqHistory = (userId) =>
 export const fetchPointsRequested = (userId) =>
   fetchData(endpoints.pointsRequested, {
     params: {
-      ctryCode: 123,
-      langCode: 12,
+      ctryCode: "123",
+      langCode: "12",
       brachCode: "B123",
       requestState: 0,
     },
@@ -133,32 +143,25 @@ export const fetchPointsRequested = (userId) =>
   });
 
 // FETCH DATA FOR CREATION
+const axiosLocalInstance = axios.create({
+  baseURL: `${window.location.protocol}//${window.location.hostname}:${window.location.port}`,
+});
+
 export const createEmployee = (userId) =>
-  fetchData(endpoints.createEmp, {
-    userId,
-  });
+  axiosLocalInstance.get(endpoints.createEmp);
+
 export const createBranch = (userId) =>
-  fetchData(endpoints.createBranch, {
-    headers: {
-      userId,
-    },
-  });
+  axiosLocalInstance.get(endpoints.createBranch);
+
 export const createRole = (userId) =>
-  fetchData(endpoints.createRole, {
-    headers: {
-      userId,
-    },
-  });
+  axiosLocalInstance.get(endpoints.createRole);
+
 export const givePoint = (userId) =>
-  fetchData(endpoints.givePoint, {
-    headers: {
-      userId,
-    },
-  });
+  axiosLocalInstance.get(endpoints.givePoint);
+
 export const creditPoint = (userId) =>
-  fetchData(endpoints.creditPoint, {
-    userId,
-  });
+  axiosLocalInstance.get(endpoints.creditPoint);
+
 export const pointRequestFromBM = (userId) =>
   fetchData(endpoints.pointRequestFromBM, {
     headers: {

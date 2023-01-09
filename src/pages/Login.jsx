@@ -1,4 +1,7 @@
-import React, { useReducer, useState } from "react";
+import { FormControlLabel, Switch } from "@mui/material";
+import React, { useEffect, useReducer, useState } from "react";
+import { createRef } from "react";
+import { useRef } from "react";
 import { FaUserCircle } from "react-icons/fa";
 import { RiLockPasswordFill } from "react-icons/ri";
 import { useMutation } from "react-query";
@@ -51,9 +54,17 @@ const Login = () => {
   // custom states
   const [formError, setFormError] = useState(null);
   const [isFormError, setIsFormError] = useState(false);
+  const [showPass, setShowPass] = useState(false);
+  const passRef = useRef();
   const navigate = useNavigate();
   // reducer
   const [formStates, dispatch] = useReducer(reducer, initialState);
+
+  useEffect(() => {
+    if (showPass) {
+      passRef.current.setAttribute("type", "text");
+    } else passRef.current.setAttribute("type", "password");
+  }, [showPass]);
 
   const handleLogin = (e) => {
     e.preventDefault();
@@ -118,10 +129,29 @@ const Login = () => {
               onChange={(e) =>
                 dispatch({ type: Actions.setPassword, payload: e.target.value })
               }
+              ref={passRef}
               label="Password"
               name="password"
               type="password"
               icon={<RiLockPasswordFill color="#444" size={25} />}
+            />
+            <FormControlLabel
+              // sx={{
+              //   display: "flex",
+              //   alignItems: "center",
+              // }}
+              className="flex items-center text-gray-700 select-none"
+              control={
+                <Switch
+                  checked={showPass}
+                  onChange={() => {
+                    setShowPass(!showPass);
+                  }}
+                  name="loading"
+                  color="info"
+                />
+              }
+              label="Show Password"
             />
 
             {isLoading ? (

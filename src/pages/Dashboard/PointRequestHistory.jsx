@@ -1,53 +1,56 @@
 import React, { useMemo } from "react";
 import { useQuery } from "react-query";
-import { fetchPointsReqHistory, fetchPointsRequested } from "../../api/Api";
+import { fetchPointsReqHistory } from "../../api/Api";
 import { Loading } from "../../components";
 import MainSkeleton from "../../components/MainSkeleton";
 import { lazyLoad } from "../../lazyLoad";
 import { ReactTable } from "../../components/ReactTable";
+import useAuth from "../../hooks/useAuth";
+import { getTableCols, getTableData } from "../../reactTableFn";
 
 // const ReactTable = lazyLoad("./components/ReactTable", "ReactTable");
 
 const PointRequestHistory = () => {
+  // REACT-TABLE setting columns and data
   try {
+    const { user } = useAuth();
     const {
       isLoading,
       isError,
       error,
-      data: pointsRequestHistory,
-    } = useQuery("pointsRequestHistory", fetchPointsReqHistory);
-
-    // REACT-TABLE settting columns and data
-    const columns = useMemo(
-      () =>
-        pointsRequestHistory &&
-        Object.keys(pointsRequestHistory.data[0]).map((key) => {
-          return {
-            Header: key,
-            accessor: key,
-          };
-        }),
-      [pointsRequestHistory?.data],
+      data: pointRequestHistory,
+    } = useQuery("pointRequestHistory", () =>
+      fetchPointsReqHistory(user.userId),
     );
 
-    const data = useMemo(
-      () => pointsRequestHistory && [...pointsRequestHistory.data],
-      [pointsRequestHistory?.data],
+    const columns = useMemo(
+      () =>
+        pointRequestHistory?.data?.response &&
+        getTableCols(pointRequestHistory.data?.response),
+      [pointRequestHistory?.data?.response],
+    );
+
+    const tableData = useMemo(
+      () =>
+        pointRequestHistory?.data?.response &&
+        getTableData(pointRequestHistory?.data?.response),
+      [pointRequestHistory?.data?.response],
     );
 
     if (isLoading) return <MainSkeleton />;
-    if (isError) return <h1>{error?.message}</h1>;
+    if (isError) return <h1>{error.message}</h1>;
 
     return (
+      // <></>
       <ReactTable
         columns={columns}
-        data={data}
-        tableName={"Point Request History"}
+        data={tableData}
+        tableName={"Points Request History"}
       />
     );
   } catch (err) {
-    console.error(err);
-    return <>ERROR</>;
+    console.log(err);
+    return <>Error</>;
   }
 };
 

@@ -5,49 +5,52 @@ import { Loading } from "../../components";
 import MainSkeleton from "../../components/MainSkeleton";
 import { lazyLoad } from "../../lazyLoad";
 import { ReactTable } from "../../components/ReactTable";
+import useAuth from "../../hooks/useAuth";
+import { getTableCols, getTableData } from "../../reactTableFn";
 
 // const ReactTable = lazyLoad("./components/ReactTable", "ReactTable");
 
 const PointsEarnedByDriver = () => {
+  // REACT-TABLE setting columns and data
   try {
+    const { user } = useAuth();
     const {
       isLoading,
       isError,
       error,
       data: pointsEarnedByDriver,
-    } = useQuery("pointsEarnedByDriver", fetchPointsEarnedByDrivers);
-
-    // REACT-TABLE settting columns and data
-    const columns = useMemo(
-      () =>
-        pointsEarnedByDriver &&
-        Object.keys(pointsEarnedByDriver.data[0]).map((key) => {
-          return {
-            Header: key,
-            accessor: key,
-          };
-        }),
-      [pointsEarnedByDriver?.data],
+    } = useQuery("pointEarnedByDriver", () =>
+      fetchPointsEarnedByDrivers(user.userId),
     );
 
-    const data = useMemo(
-      () => pointsEarnedByDriver && [...pointsEarnedByDriver.data],
-      [pointsEarnedByDriver?.data],
+    const columns = useMemo(
+      () =>
+        pointsEarnedByDriver?.data?.response &&
+        getTableCols(pointsEarnedByDriver.data?.response),
+      [pointsEarnedByDriver?.data?.response],
+    );
+
+    const tableData = useMemo(
+      () =>
+        pointsEarnedByDriver?.data?.response &&
+        getTableData(pointsEarnedByDriver?.data?.response),
+      [pointsEarnedByDriver?.data?.response],
     );
 
     if (isLoading) return <MainSkeleton />;
-    if (isError) return <h1>{error?.message}</h1>;
+    if (isError) return <h1>{error.message}</h1>;
 
     return (
+      // <></>
       <ReactTable
         columns={columns}
-        data={data}
-        tableName={"Points Earned by Drivers"}
+        data={tableData}
+        tableName={"Points Earned By Driver"}
       />
     );
   } catch (err) {
-    console.error(err);
-    return <>ERROR</>;
+    console.log(err);
+    return <>Error</>;
   }
 };
 
