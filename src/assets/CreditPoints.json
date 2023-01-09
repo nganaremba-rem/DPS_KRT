@@ -1,0 +1,16 @@
+[
+  {
+    "field": "Select Branch Manager",
+    "type": "select",
+    "name": "branchManager",
+    "id": "branchManager",
+    "endPoint": "http://localhost:4000/users"
+  },
+  {
+    "field": "Credit Amount",
+    "type": "text",
+    "name": "creditAmount",
+    "id": "creditAmount",
+    "endPoint": "http://localhost:4000/users"
+  }
+]
