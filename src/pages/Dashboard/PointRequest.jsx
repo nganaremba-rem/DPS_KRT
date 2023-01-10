@@ -8,10 +8,24 @@ import useAuth from "../../hooks/useAuth";
 import { getTableCols, getTableData } from "../../reactTableFn";
 import { Modal } from "@mui/material";
 import { AiFillCloseCircle } from "react-icons/ai";
-const ModifyPoint = ({ id, point, close }) => {
+
+const ModifyPoint = ({ id, point, close, mutate }) => {
+  const handleSubmitModify = (e) => {
+    e.preventDefault();
+    const formData = Object.fromEntries(new FormData(e.target));
+    mutate(formData, {
+      onSuccess: (response) => {
+        console.log(response);
+      },
+    });
+  };
+
   return (
     <div className="flex justify-center items-center h-full ">
-      <form className="bg-slate-300 rounded px-10 py-5 flex-col relative flex gap-2 w-[50%]">
+      <form
+        onSubmit={handleSubmitModify}
+        className="bg-slate-300 rounded px-10 py-5 flex-col relative flex gap-2 w-[50%]"
+      >
         <button
           className="bg-white rounded-full p-0 absolute top-0 right-0"
           onClick={() => close(false)}
@@ -27,7 +41,9 @@ const ModifyPoint = ({ id, point, close }) => {
           id="modReqPoint"
           defaultValue={point}
         />
-        <button className="bg-blue-700 text-white p-2 rounded">Accept</button>
+        <button type="submit" className="bg-blue-700 text-white p-2 rounded">
+          Accept
+        </button>
       </form>
     </div>
   );
@@ -49,7 +65,7 @@ const PointRequest = () => {
     } = useQuery("pointsRequested", () => fetchPointsRequested(user.userId));
 
     const {
-      mutate: mutateAccept,
+      mutate,
       isLoading: isLoadingAccept,
       isError: isErrorAccept,
       error: errorAccept,
@@ -85,7 +101,7 @@ const PointRequest = () => {
                     reqPointsId: row.values.reqPntNo,
                     modReqPoint: row.values.reqPoint,
                   };
-                  mutateAccept(data, {
+                  mutate(data, {
                     onSuccess: (res) => {
                       console.log(res);
                     },
@@ -112,7 +128,7 @@ const PointRequest = () => {
                       reqPointsId: row.values.reqPntNo,
                       modReqPoint: 0,
                     };
-                    mutateAccept(data, {
+                    mutate(data, {
                       onSuccess: (res) => {
                         console.log(res);
                       },
@@ -156,7 +172,12 @@ const PointRequest = () => {
           open={modal}
           children={
             <>
-              <ModifyPoint id={reqPointId} point={modPoint} close={setModal} />
+              <ModifyPoint
+                mutate={mutate}
+                id={reqPointId}
+                point={modPoint}
+                close={setModal}
+              />
             </>
           }
         />
