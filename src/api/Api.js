@@ -9,10 +9,9 @@ export const getAPI = async (url) => {
 };
 
 // ! BASE URL
-// const postURL = "https://krt-node-server-production-695a.up.railway.app";
+// const baseURL = "https://krt-node-server-production-695a.up.railway.app";
 // const baseURL =
 //   "https://krt-backend-json-server-production-5cc1.up.railway.app";
-const postURL = "http://burn.pagekite.me";
 const baseURL = "http://burn.pagekite.me";
 // const baseURL = "http://localhost:4000";
 
@@ -35,7 +34,7 @@ export const postData = (data, url, options = {}) => {
   return axios
     .post(url, data, {
       ...options,
-      baseURL: postURL,
+      baseURL: baseURL,
     })
     .then((res) => res)
     .catch((err) => err);
@@ -45,7 +44,7 @@ export const postData = (data, url, options = {}) => {
 
 const deleteRequest = (url) => {
   return axios.delete(url, {
-    baseURL: postURL,
+    baseURL: baseURL,
   });
 };
 
@@ -69,6 +68,28 @@ export const fetchEmployees = (userId) =>
       userId: userId,
     },
   });
+export const getAllDrivers = (userId) =>
+  fetchData(endpoints.allDrivers, {
+    params: {
+      ctryCode: "123",
+      langCode: "12",
+    },
+    headers: {
+      userId: userId,
+    },
+  });
+
+export const getdriversWithDetails = (userId) =>
+  fetchData(endpoints.driversWithDetails, {
+    params: {
+      ctryCode: "123",
+      langCode: "12",
+    },
+    headers: {
+      userId: userId,
+    },
+  });
+
 export const fetchMenus = (userId) =>
   fetchData(endpoints.menu, {
     params: {

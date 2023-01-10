@@ -42,6 +42,8 @@ export const endpoints = {
   login: "/auth/login",
   logout: "/logout",
   acceptPointRequest: "/points/responseWithdrawRequest",
+  allDrivers: "/allDrivers",
+  driversWithDetails: "/driversWithDetails",
 };
 // export const endpoints = {
 //   baseUrl: "https://krt-backend-json-server-production-5cc1.up.railway.app",
