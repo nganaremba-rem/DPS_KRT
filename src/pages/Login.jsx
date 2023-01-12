@@ -49,7 +49,7 @@ const Login = () => {
     mutationFn: LoginFn,
   });
 
-  const { setUser } = useAuth();
+  const { setUser, setMenus } = useAuth();
 
   // custom states
   const [formError, setFormError] = useState(null);
@@ -87,7 +87,8 @@ const Login = () => {
           setIsFormError(true);
           setFormError(data.data.status.message);
         } else if (data.data.status.code === "200") {
-          setUser(data?.data?.response);
+          setUser(data?.data?.response?.basicUserInfo);
+          setMenus(data?.data?.response?.uiFunctionList);
           localStorage.setItem("user", JSON.stringify(data?.data?.response));
           navigate("/dashboard");
         }

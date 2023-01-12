@@ -15,6 +15,7 @@ export const ReactTable = ({
   data,
   tableHooks = false,
   tableName,
+  message = "",
 }) => {
   const {
     getTableProps,
@@ -43,6 +44,10 @@ export const ReactTable = ({
     useSortBy,
     usePagination,
   );
+
+  if (data.length === 0) {
+    return <h1>No Data</h1>;
+  }
 
   return (
     <>
@@ -146,7 +151,8 @@ export const ReactTable = ({
         </motion.div>
       ) : (
         <div className="flex justify-center items-center">
-          <SyncLoader color="#36d7b7" size={20} />
+          {/* <SyncLoader color="#36d7b7" size={20} /> */}
+          <h1 className="text-2xl font-bold text-gray-600">{message}</h1>
         </div>
       )}
     </>

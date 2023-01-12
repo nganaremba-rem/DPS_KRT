@@ -1,6 +1,6 @@
 import React, { useMemo } from "react";
 import { useQuery } from "react-query";
-import { getdriversWithDetails } from "../../api/Api";
+import { getdriversPointDisplay } from "../../api/Api";
 import MainSkeleton from "../../components/MainSkeleton";
 import { ReactTable } from "../../components/ReactTable";
 import useAuth from "../../hooks/useAuth";
@@ -8,34 +8,38 @@ import { getTableCols, getTableData } from "../../reactTableFn";
 
 // const ReactTable = lazyLoad("./components/ReactTable", "ReactTable");
 
-const DriversWithDetails = () => {
+const DriversPointDisplay = () => {
   try {
     const { user } = useAuth();
     const {
       isLoading,
       isError,
-      data: driversWithDetails,
+      data: driversPointDisplay,
       error,
-    } = useQuery("driversWithDetails", () =>
-      getdriversWithDetails(user.userId),
+    } = useQuery("driversPointDisplay", () =>
+      getdriversPointDisplay(user.userId),
     );
 
     // REACT-TABLE settting columns and data
     const columns = useMemo(() => {
-      if (driversWithDetails?.data)
-        return getTableCols(driversWithDetails?.data);
-    }, [driversWithDetails?.data]);
+      if (driversPointDisplay?.data?.response)
+        return getTableCols(driversPointDisplay?.data?.response);
+    }, [driversPointDisplay?.data?.response]);
 
     const data = useMemo(() => {
-      if (driversWithDetails?.data)
-        return getTableData(driversWithDetails?.data);
-    }, [driversWithDetails?.data]);
+      if (driversPointDisplay?.data?.response)
+        return getTableData(driversPointDisplay?.data?.response);
+    }, [driversPointDisplay?.data?.response]);
 
     if (isLoading) return <MainSkeleton />;
     if (isError) return <h1>{error?.message}</h1>;
 
     return (
-      <ReactTable columns={columns} data={data} tableName={"All Drivers"} />
+      <ReactTable
+        columns={columns}
+        data={data}
+        tableName={"Drivers Point Display"}
+      />
     );
   } catch (err) {
     console.error(err);
@@ -43,4 +47,4 @@ const DriversWithDetails = () => {
   }
 };
 
-export default DriversWithDetails;
+export default DriversPointDisplay;

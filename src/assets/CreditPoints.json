@@ -6,7 +6,6 @@
     "id": "managerId",
     "endPoint": "/user/getUserByRole",
     "devId": "managerId",
-
     "required": true
   },
   {

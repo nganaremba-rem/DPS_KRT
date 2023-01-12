@@ -39,11 +39,15 @@ export const endpoints = {
   assignCreditPoint: "/points/creditPoints",
   userOptions: "/userOptions",
   pointRequestFromBM: "/pointRequestFromBM",
-  login: "/auth/login",
+  login: "/auth/webLogin",
   logout: "/logout",
   acceptPointRequest: "/points/responseWithdrawRequest",
   allDrivers: "/allDrivers",
-  driversWithDetails: "/driversWithDetails",
+  createEmployeePOST: "/zzz",
+  driversPointDisplay: "/webRequest/driverInfoWithPoint",
+  getAllGivePoint: "/points/pendingGivePoint",
+  postGivePoint: "/points/givePoints",
+  postAcceptGivePoint: "/points/approvePoints",
 };
 // export const endpoints = {
 //   baseUrl: "https://krt-backend-json-server-production-5cc1.up.railway.app",

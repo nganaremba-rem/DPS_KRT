@@ -4,8 +4,8 @@
         "type": "select",
         "name": "rcvUsrCode",
         "id": "rcvUsrCode",
-        "devId": "driver",
-        "endPoint": "http://localhost:4000/users",
+        "devId": "drivers",
+        "endPoint": "/user/getUserByRole",
         "required": true
     },
     {

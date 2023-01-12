@@ -58,6 +58,7 @@ export const fetchUserOptions = (userId) =>
       userId,
     },
   });
+
 export const fetchEmployees = (userId) =>
   fetchData(endpoints.employees, {
     params: {
@@ -79,8 +80,30 @@ export const getAllDrivers = (userId) =>
     },
   });
 
-export const getdriversWithDetails = (userId) =>
-  fetchData(endpoints.driversWithDetails, {
+export const getDriversFromBranch = (userId) =>
+  fetchData(endpoints.allDrivers, {
+    params: {
+      ctryCode: "123",
+      langCode: "12",
+    },
+    headers: {
+      userId: userId,
+    },
+  });
+
+export const getdriversPointDisplay = (userId) =>
+  fetchData(endpoints.driversPointDisplay, {
+    params: {
+      ctryCode: "123",
+      langCode: "12",
+      brachCode: "B123",
+    },
+    headers: {
+      userId: userId,
+    },
+  });
+export const acceptGivePoint = (userId) =>
+  fetchData(endpoints.getAllGivePoint, {
     params: {
       ctryCode: "123",
       langCode: "12",
@@ -199,6 +222,14 @@ export const LoginFn = (data) =>
     headers: { "Content-Type": "application/json" },
   });
 
+export const createEmployeeApi = (data, userId) =>
+  postData(data, endpoints.createEmployeePOST, {
+    params: {
+      ctryCode: "123",
+      langCode: "12",
+    },
+    headers: { "Content-Type": "application/json", userId },
+  });
 export const assignCreditPoint = (data, userId) =>
   postData(data, endpoints.assignCreditPoint, {
     params: {
@@ -219,6 +250,31 @@ export const acceptPointRequest = (data, userId) =>
       "Content-Type": "application/json",
     },
   });
+
+export const postGivePoint = (data, userId) =>
+  postData(data, endpoints.postGivePoint, {
+    params: {
+      ctryCode: "IN",
+      langCode: "EN",
+    },
+    headers: {
+      userId,
+      "Content-Type": "application/json",
+    },
+  });
+
+export const postAcceptGivePoint = (data, userId) => {
+  return postData(data, endpoints.postAcceptGivePoint, {
+    params: {
+      ctryCode: "123",
+      langCode: "12",
+    },
+    headers: {
+      userId: "p1234",
+      "Content-Type": "application/json",
+    },
+  });
+};
 
 // ! DELETE request functions
 

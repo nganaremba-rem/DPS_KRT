@@ -20,7 +20,7 @@ import Notification from "./Notification";
 
 const Navbar = () => {
   const { setActiveSidebar, screenSize, setScreenSize } = useStateContext();
-  const { user, setUser } = useAuth();
+  const { user, setUser, setMenus } = useAuth();
 
   const {
     isLoading: logoutIsLoading,
@@ -65,6 +65,7 @@ const Navbar = () => {
   const handleLogout = () => {
     localStorage.removeItem("user");
     setUser(null);
+    setMenus(null);
     navigate("/");
     // mutate(
     //   {},
@@ -113,7 +114,7 @@ const Navbar = () => {
   return (
     <>
       <nav
-        className={` px-2 py-1 transition-all ease-linear bg-slate-100 flex items-center justify-between`}
+        className={` px-2 py-1 sticky top-0 z-50 transition-all ease-linear bg-slate-100 flex items-center justify-between`}
       >
         <div className="flex items-center">
           <NavButton

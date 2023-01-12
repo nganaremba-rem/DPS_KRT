@@ -3,7 +3,7 @@ import React, { useMemo, useState } from "react";
 import { useEffect } from "react";
 import { AiFillCloseCircle } from "react-icons/ai";
 import { useMutation, useQuery, useQueryClient } from "react-query";
-import { fetchPointsRequested, acceptPointRequest } from "../../api/Api";
+import { acceptGivePoint, postAcceptGivePoint } from "../../api/Api";
 import ButtonWithLoading from "../../components/Form/ButtonWithLoading";
 import MainSkeleton from "../../components/MainSkeleton";
 import { ReactTable } from "../../components/ReactTable";
@@ -40,7 +40,7 @@ const ModifyPoint = ({
         }
         close(false);
         showSnackbar(TransitionLeft);
-        queryClient.invalidateQueries("pointsRequested");
+        queryClient.invalidateQueries("acceptGivePoint");
       },
     });
   };
@@ -58,12 +58,12 @@ const ModifyPoint = ({
           <AiFillCloseCircle color="red" size={30} />
         </button>
         <h3 className="text-2xl font-bold">{id}</h3>
-        <input type="hidden" name="reqPointsId" value={id} />
+        <input type="hidden" name="givPntNo" value={id} />
         <input
           className="rounded p-2"
           type="text"
-          name="modReqPoint"
-          id="modReqPoint"
+          name="modGivPoint"
+          id="modGivPoint"
           defaultValue={point}
         />
         <ButtonWithLoading
@@ -80,10 +80,10 @@ const ModifyPoint = ({
 
 // const ReactTable = lazyLoad("./components/ReactTable", "ReactTable");
 
-const PointRequest = () => {
+const AcceptGivePoint = () => {
   const [modal, setModal] = useState(false);
-  const [reqPointsId, setreqPointsId] = useState("");
-  const [modReqPoint, setmodReqPoint] = useState("");
+  const [reqPointId, setReqPointId] = useState("");
+  const [modPoint, setModPoint] = useState("");
   const queryClient = useQueryClient();
   const [manualLoading, setManualLoading] = useState(false);
   const [toast, setToast] = useState({
@@ -113,7 +113,7 @@ const PointRequest = () => {
       isError,
       error,
       data: pointsRequested = [],
-    } = useQuery("pointsRequested", () => fetchPointsRequested(user.userId));
+    } = useQuery("acceptGivePoint", () => acceptGivePoint(user.userId));
 
     const {
       mutate: mutateAccept,
@@ -121,7 +121,7 @@ const PointRequest = () => {
       isError: isErrorAccept,
       error: errorAccept,
     } = useMutation({
-      mutationFn: (data) => acceptPointRequest(data, user.userId),
+      mutationFn: (data) => postAcceptGivePoint(data, user.userId),
     });
     const {
       mutate: mutateDeny,
@@ -129,7 +129,7 @@ const PointRequest = () => {
       isError: isErrorDeny,
       error: errorDeny,
     } = useMutation({
-      mutationFn: (data) => acceptPointRequest(data, user.userId),
+      mutationFn: (data) => postAcceptGivePoint(data, user.userId),
     });
     const {
       mutate: mutateModify,
@@ -137,7 +137,7 @@ const PointRequest = () => {
       isError: isErrorModify,
       error: errorModify,
     } = useMutation({
-      mutationFn: (data) => acceptPointRequest(data, user.userId),
+      mutationFn: (data) => postAcceptGivePoint(data, user.userId),
     });
 
     useEffect(() => {
@@ -182,8 +182,8 @@ const PointRequest = () => {
                   size={"medium"}
                   onClick={() => {
                     const data = {
-                      reqPointsId: row.values.reqPntNo,
-                      modReqPoint: row.values.reqPoint,
+                      givPntNo: row.values.givPntNo,
+                      modGivPoint: row.values.point,
                     };
                     mutateAccept(data, {
                       onSuccess: (res) => {
@@ -196,7 +196,7 @@ const PointRequest = () => {
                           setMessage("Accepted");
                         }
                         showSnackbar(TransitionLeft);
-                        queryClient.invalidateQueries("pointsRequested");
+                        queryClient.invalidateQueries("acceptGivePoint");
                       },
                     });
                   }}
@@ -222,8 +222,8 @@ const PointRequest = () => {
                       true
                     ) {
                       const data = {
-                        reqPointsId: row.values.reqPntNo,
-                        modReqPoint: 0,
+                        givPntNo: row.values.givPntNo,
+                        modGivPoint: 0,
                       };
                       mutateDeny(data, {
                         onSuccess: (res) => {
@@ -236,7 +236,7 @@ const PointRequest = () => {
                             setMessage("Denied");
                           }
                           showSnackbar(TransitionLeft);
-                          queryClient.invalidateQueries("pointsRequested");
+                          queryClient.invalidateQueries("acceptGivePoint");
                         },
                       });
                     }
@@ -257,8 +257,8 @@ const PointRequest = () => {
                   size={"medium"}
                   color={"info"}
                   onClick={() => {
-                    setreqPointsId(row.values.reqPntNo);
-                    setmodReqPoint(row.values.reqPoint);
+                    setReqPointId(row.values.givPntNo);
+                    setModPoint(row.values.point);
                     setModal(true);
                   }}
                 />
@@ -298,8 +298,8 @@ const PointRequest = () => {
               <ModifyPoint
                 mutate={mutateModify}
                 queryClient={queryClient}
-                id={reqPointsId}
-                point={modReqPoint}
+                id={reqPointId}
+                point={modPoint}
                 close={setModal}
                 isLoading={isLoadingModify}
                 showSnackbar={showSnackbar}
@@ -314,7 +314,7 @@ const PointRequest = () => {
         <ReactTable
           columns={columns}
           data={data}
-          tableName={"Point Request from drivers"}
+          tableName={"Point Request from Branch Manager"}
           tableHooks={tableHooks}
           message={"No new point request"}
         />
@@ -326,4 +326,4 @@ const PointRequest = () => {
   }
 };
 
-export default PointRequest;
+export default AcceptGivePoint;

@@ -61,32 +61,19 @@ const Sidebar = () => {
 };
 
 const MenuItems = ({ closeSidebar }) => {
-  const { user } = useAuth();
-  const {
-    isLoading,
-    isError,
-    error,
-    data: menuData,
-  } = useQuery("menu", () => fetchMenus(user.userId));
+  const { menus } = useAuth();
+  if (menus?.length === 0) return <div>No Menu Data</div>;
 
-  // check menusResponse
-  // useEffect(() => {
-  //   menuData !== undefined && console.log(menuData);
-  // }, [menuData]);
-
-  if (isLoading) return <MenuSkeleton />;
-  if (isError) return <h1>{error?.message}</h1>;
-
-  return menuData?.data?.response.map((menuItem) => {
+  return menus?.map((menuItem) => {
     return (
       <MenuGroup key={menuItem?.name} name={menuItem?.name}>
-        {menuItem?.operation.map((operation) => {
-          const to = operation.to.toLowerCase().replace(/\s/g, "");
+        {menuItem?.subMenus?.map((subMenu) => {
+          const to = subMenu.to.toLowerCase().replace(/\s/g, "");
           return (
             <MenuItem
-              name={operation?.name}
+              name={subMenu?.name}
               to={to}
-              key={operation?.name}
+              key={subMenu?.name}
               custFnc={closeSidebar}
             />
           );

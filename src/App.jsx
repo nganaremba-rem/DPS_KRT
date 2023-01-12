@@ -49,9 +49,12 @@ import {
   CreditPoint,
   ConfirmPoints,
 } from "./pages";
+import AcceptGivePoint from "./pages/Dashboard/AcceptGivePoint";
 import DeleteBranch from "./pages/Dashboard/DeleteBranch";
 import DeleteEmployee from "./pages/Dashboard/DeleteEmployee";
 import DeleteRole from "./pages/Dashboard/DeleteRole";
+import DriversPointDisplay from "./pages/Dashboard/DriversPointDisplay";
+import DriversWithDetails from "./pages/Dashboard/DriversPointDisplay";
 // import EditBranch from "./pages/Dashboard/EditBranch";
 // import EditEmployee from "./pages/Dashboard/EditEmployee";
 // import EditPage from "./pages/Dashboard/EditPage";
@@ -95,6 +98,11 @@ const App = () => {
                   element={<ConfirmPoints />}
                 />
                 <Route path="creditPoint" element={<CreditPoint />} />
+                <Route
+                  path="driverspointsdisplay"
+                  element={<DriversPointDisplay />}
+                />
+                <Route path="acceptgivepoint" element={<AcceptGivePoint />} />
                 <Route path="edit" element={<EditPoint />} />
                 <Route path="givePoint" element={<GivePoint />} />
                 <Route path="pointsEarned" element={<PointEarnedByDriver />} />
