@@ -1,12 +1,7 @@
-import { Button } from "@mui/material";
 import axios from "axios";
 import React from "react";
-import { useQuery } from "react-query";
-import { ClipLoader } from "react-spinners";
-import { Axios } from "../api/Api";
 import useAuth from "../hooks/useAuth";
 import ButtonWithLoading from "./Form/ButtonWithLoading";
-import LoadingButton from "./Form/LoadingButton";
 import SelectOption from "./Form/SelectOption";
 import TextField from "./Form/TextField";
 
@@ -22,6 +17,7 @@ const FormPage = React.forwardRef(
       submitBtnText,
       submitButtonEndIcon,
       isLoading = false,
+      extraData,
     },
     ref,
   ) => {
@@ -35,8 +31,7 @@ const FormPage = React.forwardRef(
       console.log(formData);
     };
 
-    function getOptionsData(endpoint, options, params) {
-      // const { data } = useQuery(queryKey, () => {});
+    function getOptionsData(endpoint, options, params = {}) {
       return new Promise(async (resolve) => {
         try {
           let dataArr;
@@ -47,12 +42,13 @@ const FormPage = React.forwardRef(
               },
             });
           } else {
-            dataArr = await Axios.get(endpoint, {
-              params: { ...params },
-              headers: {
-                userId: user.userId,
-              },
-            });
+            // dataArr = await Axios.get(endpoint, {
+            //   params: { ...params },
+            //   headers: {
+            //     userId: user.userId,
+            //   },
+            // });
+            dataArr = endpoint;
           }
           const result = dataArr.data.response.map((data) => {
             return {
@@ -69,7 +65,7 @@ const FormPage = React.forwardRef(
 
     return (
       <div className="flex w-full md:max-w-max flex-col gap-2 bg-white py-10 px-5 md:px-20 shadow-md rounded-lg">
-        <h1 className="text-2xl font-extrabold text-gray-600 mb-7 border-b-2">
+        <h1 className="text-2xl mb-5 font-extrabold text-gray-600  border-b-2">
           {formTitle}
         </h1>
         <form
@@ -80,7 +76,7 @@ const FormPage = React.forwardRef(
           className="grid md:grid-cols-2 gap-5"
         >
           {formFieldsData.map((input) => {
-            if (["text", "email"].includes(input.type)) {
+            if (["text", "email", "password"].includes(input.type)) {
               return (
                 <TextField
                   key={input.name}
@@ -95,9 +91,6 @@ const FormPage = React.forwardRef(
             if (input.type === "select") {
               let optionFnc;
               switch (input.devId) {
-                case "branchOfficeCode":
-                  break;
-
                 case "givePointValue":
                   optionFnc = () => {
                     return getOptionsData(input.endPoint, {
@@ -109,42 +102,46 @@ const FormPage = React.forwardRef(
                   optionFnc();
                   break;
 
-                case "managerId":
+                case "drivers":
                   optionFnc = () => {
-                    const params = {
-                      ctryCode: 123,
-                      langCode: 12,
-                      role: "BM",
-                    };
-                    return getOptionsData(
-                      input.endPoint,
-                      {
-                        label: "userName",
-                        value: "userId",
-                        local: false,
-                      },
-                      params,
-                    );
+                    return getOptionsData(extraData.drivers.data, {
+                      label: "userName",
+                      value: "userId",
+                      local: false,
+                    });
                   };
                   optionFnc();
                   break;
 
-                case "drivers":
+                case "roleCd":
                   optionFnc = () => {
-                    const params = {
-                      ctryCode: 123,
-                      langCode: 12,
-                      role: "DR",
-                    };
-                    return getOptionsData(
-                      input.endPoint,
-                      {
-                        label: "userName",
-                        value: "userId",
-                        local: false,
-                      },
-                      params,
-                    );
+                    return getOptionsData(extraData.roleList.data, {
+                      label: "roleNm",
+                      value: "roleCd",
+                      local: false,
+                    });
+                  };
+                  optionFnc();
+                  break;
+
+                case "divCd":
+                  optionFnc = () => {
+                    return getOptionsData(extraData.branchList.data, {
+                      label: "divNm",
+                      value: "divCd",
+                      local: false,
+                    });
+                  };
+                  optionFnc();
+                  break;
+
+                case "managerId":
+                  optionFnc = () => {
+                    return getOptionsData(extraData.branchManagers.data, {
+                      label: "userName",
+                      value: "userId",
+                      local: false,
+                    });
                   };
                   optionFnc();
                   break;
@@ -163,6 +160,44 @@ const FormPage = React.forwardRef(
                   optionsFnc={optionFnc}
                   required={input.required}
                 />
+              );
+            }
+            if (input.type === "date") {
+              return (
+                <div key={input.name} className="flex flex-col gap-2 ">
+                  <label className="text-gray-700 pl-2" htmlFor={input.name}>
+                    {input.field}
+                  </label>
+                  <input
+                    className="px-3 py-1 text-gray-600 border rounded"
+                    type={"datetime-local"}
+                    name={input.name}
+                    id={input.id}
+                  />
+                </div>
+              );
+            }
+            if (["radio", "checkbox"].includes(input.type)) {
+              return (
+                <div className="flex flex-col gap-2">
+                  <label className="text-gray-700 pl-2" htmlFor={input.name}>
+                    {input.field}
+                  </label>
+                  <div className="flex flex-col gap-2 justify-center">
+                    {input.options.map((option, idx) => {
+                      return (
+                        <div className="flex gap-2 items-center">
+                          <input
+                            type={input.type}
+                            name={input.name}
+                            id={input.id[idx]}
+                          />
+                          <label htmlFor={input.id[idx]}>{option}</label>
+                        </div>
+                      );
+                    })}
+                  </div>
+                </div>
               );
             }
           })}

@@ -1,35 +1,66 @@
-import React from "react";
+import React, { useState } from "react";
+import { BsFillEyeFill, BsFillEyeSlashFill } from "react-icons/bs";
+import { v4 } from "uuid";
 
-const TextField = ({
-  label,
-  name,
-  placeholder,
-  id,
-  icon,
-  type,
-  value,
-  required,
-}) => {
-  return (
-    <div className="grid  md:items-center outline-none focus:shadow-lg  md:gap-1 gap-1">
-      <label
-        className="text-gray-800 flex items-center gap-2"
-        htmlFor={id || name}
+const TextField = React.forwardRef(
+  ({ label, name, placeholder, id, icon, type, value, required }, ref) => {
+    const [shown, setShown] = useState(false);
+
+    if (type === "password") {
+      return (
+        <>
+          <div className="flex flex-col gap-2">
+            <label className="pl-2 text-gray-700" htmlFor={id || name}>
+              {label}
+            </label>
+            <div className="border group rounded flex items-center ">
+              <input
+                className="h-full text-md w-full min-w-[0px] px-3 outline-none py-1"
+                type={shown ? "text" : "password"}
+                name={name || id}
+                id={id || name}
+              />
+              <button
+                type="button"
+                className="p-2"
+                onClick={() => setShown((prev) => !prev)}
+              >
+                {shown ? (
+                  <BsFillEyeFill color="#777" />
+                ) : (
+                  <BsFillEyeSlashFill color="#777" />
+                )}
+              </button>
+            </div>
+          </div>
+        </>
+      );
+    }
+
+    return (
+      <div
+        key={v4()}
+        className="grid  md:items-center outline-none focus:shadow-lg  md:gap-1 gap-1"
       >
-        <div className="ico text-2xl">{icon}</div>
-        <span>{label}</span>
-      </label>
-      <input
-        className="px-5 min-w-[0] lg:min-w-[20rem] py-2 rounded-md border border-slate-300 shadow-sm"
-        type={type}
-        name={name}
-        id={id || name}
-        placeholder={placeholder}
-        defaultValue={value || ""}
-        required={required}
-      />
-    </div>
-  );
-};
+        <label
+          className="text-gray-700 flex items-center gap-2"
+          htmlFor={id || name}
+        >
+          <div className="ico text-2xl">{icon}</div>
+          <span>{label}</span>
+        </label>
+        <input
+          className="px-3 outline-none min-w-[0] lg:min-w-[10rem] py-1 rounded border border-slate-300 shadow-sm"
+          type={type}
+          name={name}
+          id={id || name}
+          placeholder={placeholder}
+          defaultValue={value || ""}
+          required={required}
+        />
+      </div>
+    );
+  },
+);
 
 export default TextField;

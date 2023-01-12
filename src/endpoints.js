@@ -26,7 +26,6 @@ export const endpoints = {
   points: "/webRequest/driverInfo",
   branches: "/branchList",
   roles: "/roleList",
-  branchList: "/branchList",
   roleList: "/roleList",
   pointsEarnedByDriver: "/webRequest/pointAccommodatedData",
   pointReqHistory: "/webRequest/pointWithdrawalData",
@@ -43,11 +42,23 @@ export const endpoints = {
   logout: "/logout",
   acceptPointRequest: "/points/responseWithdrawRequest",
   allDrivers: "/allDrivers",
-  createEmployeePOST: "/zzz",
   driversPointDisplay: "/webRequest/driverInfoWithPoint",
   getAllGivePoint: "/points/pendingGivePoint",
   postGivePoint: "/points/givePoints",
   postAcceptGivePoint: "/points/approvePoints",
+  branchManagers: "/user/getUserByRole",
+  // Employee POST
+  createEmployeePOST: "/user/saveUser",
+  updateUserPUT: "/user/updateUser",
+  deleteUserDel: "/user/delUser",
+  // Branch
+  createBranchPOST: "/saveBranch",
+  updateBranchPUT: "/updateBranch",
+  deleteBranchDel: "/delBranch",
+  // Role
+  createRolePOST: "/saveRole",
+  updateRolePUT: "/updateRole",
+  deleteRoleDel: "/delRole",
 };
 // export const endpoints = {
 //   baseUrl: "https://krt-backend-json-server-production-5cc1.up.railway.app",

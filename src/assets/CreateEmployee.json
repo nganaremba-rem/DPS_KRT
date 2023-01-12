@@ -2,76 +2,108 @@
   {
     "field": "User ID",
     "type": "text",
-    "name": "userID",
-    "id": "userID"
+    "name": "userId",
+    "id": "userId",
+    "devId": "userId",
+    "required": true
   },
   {
     "field": "Employee Name",
     "type": "text",
-    "name": "empName",
-    "id": "empName"
+    "name": "userName",
+    "id": "userName",
+    "devId": "userName",
+    "required": true
+  },
+  {
+    "field": "Password",
+    "type": "password",
+    "name": "passWd",
+    "id": "passWd",
+    "devId": "passWd",
+    "required": true
   },
   {
     "field": "PIN",
     "type": "text",
-    "name": "pin",
-    "id": "pin"
-  },
-  {
-    "field": "Code of Privilege",
-    "type": "select",
-    "name": "codeOfPrivilege",
-    "id": "codeOfPrivilege",
-    "endPoint": "http://localhost:4000/users"
+    "name": "divisionLc",
+    "id": "divisionLc",
+    "devId": "divisionLc",
+    "required": true
   },
   {
     "field": "Type of User",
-    "type": "text",
-    "name": "typeOfUser",
-    "id": "typeOfUser"
+    "type": "select",
+    "name": "roleCd",
+    "id": "roleCd",
+    "devId": "roleCd",
+    "endPoint": "/roleList",
+    "required": true
   },
   {
     "field": "Branch Office Code",
     "type": "select",
-    "name": "branchOfficeCode",
-    "id": "branchOfficeCode",
-    "endPoint": "http://localhost:4000/users"
+    "name": "divCd",
+    "id": "divCd",
+    "endPoint": "/user/getUserByRole",
+    "devId": "divCd",
+    "required": true
 
   },
   {
     "field": "Family Name",
     "type": "text",
-    "name": "familyName",
-    "id": "familyName"
+    "name": "userSurnm",
+    "id": "userSurnm",
+    "devId": "userSurnm",
+    "required": true
   },
   {
     "field": "First Name",
     "type": "text",
-    "name": "firstName",
-    "id": "firstName"
+    "name": "userGivnm",
+    "id": "userGivnm",
+    "devId": "userGivnm",
+    "required": true
   },
   {
     "field": "Furigana Family Name（カナ）",
     "type": "text",
-    "name": "furiganaFamilyName",
-    "id": "furiganaFamilyName"
+    "name": "userSurnmk",
+    "id": "userSurnmk",
+    "devId": "userSurnmk",
+    "required": true
   },
   {
     "field": "Furigana of First Name（カナ）",
     "type": "text",
-    "name": "furiganaFirstName",
-    "id": "furiganaFirstName"
+    "name": "userGivnmk",
+    "id": "userGivnmk",
+    "devId": "userGivnmk",
+    "required": true
   },
   {
     "field": "Email Address",
     "type": "email",
     "name": "email",
-    "id": "email"
+    "id": "email",
+    "devId": "email",
+    "required": true
+  },
+  {
+    "field": "Pass Expiry Date",
+    "type": "date",
+    "name": "passExpDt",
+    "id": "passExpDt",
+    "devId": "passExpDt",
+    "required": true
   },
   {
     "field": "Face Photo",
     "type": "text",
     "name": "facePhoto",
-    "id": "facePhoto"
+    "id": "facePhoto",
+    "devId": "email",
+    "required": false
   }
 ]

@@ -27,13 +27,13 @@ const DeleteBranch = () => {
 
     // REACT-TABLE settting columns and data
     const columns = useMemo(
-      () => branches?.data && getTableCols(branches.data),
-      [branches?.data],
+      () => branches?.data?.response && getTableCols(branches.data?.response),
+      [branches?.data?.response],
     );
 
     const data = useMemo(
-      () => branches?.data && getTableData(branches.data),
-      [branches?.data],
+      () => branches?.data?.response && getTableData(branches.data?.response),
+      [branches?.data?.response],
     );
 
     const tableHooks = (hooks) => {

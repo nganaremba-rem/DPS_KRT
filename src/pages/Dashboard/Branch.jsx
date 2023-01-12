@@ -20,12 +20,14 @@ const Branch = () => {
 
     // REACT-TABLE settting columns and data
     const columns = useMemo(() => {
-      if (branches?.data) return getTableCols(branches?.data);
-    }, [branches?.data]);
+      if (branches?.data?.response)
+        return getTableCols(branches?.data?.response);
+    }, [branches?.data?.response]);
 
     const data = useMemo(() => {
-      if (branches?.data) return getTableData(branches?.data);
-    }, [branches?.data]);
+      if (branches?.data?.response)
+        return getTableData(branches?.data?.response);
+    }, [branches?.data?.response]);
 
     if (isLoading) return <MainSkeleton />;
     if (isError) return <h1>{error?.message}</h1>;

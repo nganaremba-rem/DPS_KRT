@@ -26,7 +26,8 @@
     "react-spinners": "^0.13.6",
     "react-table": "^7.8.0",
     "regenerator-runtime": "^0.13.11",
-    "styled-components": "^5.3.6"
+    "styled-components": "^5.3.6",
+    "uuid": "^9.0.0"
   },
   "devDependencies": {
     "@types/react": "^18.0.24",

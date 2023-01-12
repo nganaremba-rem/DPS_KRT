@@ -157,7 +157,7 @@ const Login = () => {
 
             {isLoading ? (
               <>
-                <div className="flex px-5 py-3 mt-5 bg-gradient-to-r from-teal-200 to-red-300 rounded-full justify-center items-center gap-2">
+                <div className="flex px-5 py-2 mt-4 bg-gradient-to-r from-teal-200 to-red-300 rounded-full justify-center items-center gap-2">
                   <span className="text-2xl text-slate-500">Please wait</span>
                   <PulseLoader color="#36d7b7" />
                 </div>
@@ -165,7 +165,7 @@ const Login = () => {
             ) : (
               <button
                 type="submit"
-                className="px-10 select-none mt-5 py-3 bg-teal-500 text-white rounded-2xl text-xl hover:bg-teal-800"
+                className="px-10 select-none mt-4 py-2 bg-teal-500 text-white rounded-2xl text-xl hover:bg-teal-800"
               >
                 Login
               </button>

@@ -1,5 +1,7 @@
 import { motion } from "framer-motion";
-import React from "react";
+import React, { useRef } from "react";
+import { useEffect } from "react";
+import { useState } from "react";
 import { SyncLoader } from "react-spinners";
 import {
   useGlobalFilter,
@@ -45,8 +47,22 @@ export const ReactTable = ({
     usePagination,
   );
 
+  const [tableWidth, setTableWidth] = useState(0);
+  const tableRef = useRef();
+  useEffect(() => {
+    setTableWidth(tableRef.current.offsetWidth);
+    console.log(tableRef.current.offsetWidth);
+  }, []);
+
   if (data.length === 0) {
-    return <h1>No Data</h1>;
+    return (
+      <div className="flex flex-col gap-2 w-full px-20 py-10 mx-20 bg-white rounded-xl">
+        <h1 className="sticky left-0 font-extrabold text-xl text-gray-600 border-b-2 p-2">
+          {tableName}
+        </h1>
+        <h2 className="text-lg text-gray-600 px-10">No data</h2>
+      </div>
+    );
   }
 
   return (
@@ -58,11 +74,11 @@ export const ReactTable = ({
           exit={{ x: 100 }}
           style={{
             boxShadow: "-1px 1px 7px 0px rgb(0 0 0 / 0.1)",
-            overflowX: "auto",
+            // overflowX: "auto",
           }}
-          className="m-3 bg-white  p-5 rounded-lg overflow-hidden"
+          className="m-3 w-screen bg-white  p-5 rounded-lg overflow-hidden"
         >
-          <h1 className="sticky left-0 font-extrabold text-2xl text-gray-600 border-b-2 p-2 mb-10">
+          <h1 className="sticky left-0 font-extrabold text-xl text-gray-600 border-b-2 p-2 mb-5">
             {tableName}
           </h1>
           <GlobalFilter
@@ -71,71 +87,82 @@ export const ReactTable = ({
             globalFilter={globalFilter}
           />
 
-          <motion.table
-            layout
-            animate={{ opacity: 1 }}
-            initial={{ opacity: 0 }}
-            transition={{ duration: 0.2 }}
-            {...getTableProps()}
-            className="rounded-xl shadow overflow-hidden w-full"
-          >
-            <thead className="select-none  bg-slate-300 text-gray-600">
-              {headerGroups.map((headerGroup) => {
-                return (
-                  <tr {...headerGroup.getHeaderGroupProps()}>
-                    {headerGroup.headers.map((header) => {
-                      return (
-                        <th
-                          className="p-2 text-left"
-                          {...header.getHeaderProps(
-                            header.getSortByToggleProps(),
-                          )}
-                        >
-                          {header.render("Header")}
-                          {header.isSorted
-                            ? header.isSortedDesc
-                              ? " (Sorted by Desc)"
-                              : " (Sorted by Asc)"
-                            : ""}
-                        </th>
-                      );
-                    })}
-                  </tr>
-                );
-              })}
-            </thead>
-            <tbody className=" p-2" {...getTableBodyProps()}>
-              {page.length === 0 ? (
-                <tr>
-                  <td className="text-3xl text-gray-600 font-bold">
-                    No Employee
-                  </td>
-                </tr>
-              ) : (
-                page.map((row) => {
-                  prepareRow(row);
+          <div className="overflow-x-auto overflow-y-hidden w-full mb-2">
+            <div
+              className={`h-1`}
+              style={{
+                width: `${tableWidth}px`,
+              }}
+            ></div>
+          </div>
+          <div className="w-full overflow-x-auto">
+            <motion.table
+              ref={tableRef}
+              layout
+              animate={{ opacity: 1 }}
+              initial={{ opacity: 0 }}
+              transition={{ duration: 0.2 }}
+              {...getTableProps()}
+              className="rounded-xl shadow overflow-hidden w-full"
+            >
+              <thead className="select-none  bg-slate-300 text-gray-600">
+                {headerGroups.map((headerGroup) => {
                   return (
-                    <tr
-                      style={{ boxShadow: "0 5px 10px -11px #ccc" }}
-                      className="py-5 hover:bg-slate-200"
-                      {...row.getRowProps()}
-                    >
-                      {row.cells.map((cell) => {
+                    <tr {...headerGroup.getHeaderGroupProps()}>
+                      {headerGroup.headers.map((header) => {
                         return (
-                          <td
-                            className="p-3 max-w-[24em]"
-                            {...cell.getCellProps()}
+                          <th
+                            className="p-2 text-left"
+                            {...header.getHeaderProps(
+                              header.getSortByToggleProps(),
+                            )}
                           >
-                            {cell.render("Cell")}
-                          </td>
+                            {header.render("Header")}
+                            {header.isSorted
+                              ? header.isSortedDesc
+                                ? " (Sorted by Desc)"
+                                : " (Sorted by Asc)"
+                              : ""}
+                          </th>
                         );
                       })}
                     </tr>
                   );
-                })
-              )}
-            </tbody>
-          </motion.table>
+                })}
+              </thead>
+              <tbody className=" p-2" {...getTableBodyProps()}>
+                {page.length === 0 ? (
+                  <tr>
+                    <td className="text-lg px-3 py-1 text-rose-400 font-bold">
+                      Not found
+                    </td>
+                  </tr>
+                ) : (
+                  page.map((row) => {
+                    prepareRow(row);
+                    return (
+                      <tr
+                        style={{ boxShadow: "0 5px 10px -11px #ccc" }}
+                        className="py-5 text-sm hover:bg-slate-200"
+                        {...row.getRowProps()}
+                      >
+                        {row.cells.map((cell) => {
+                          return (
+                            <td
+                              className="p-3 max-w-[24em]"
+                              {...cell.getCellProps()}
+                            >
+                              {cell.render("Cell")}
+                            </td>
+                          );
+                        })}
+                      </tr>
+                    );
+                  })
+                )}
+              </tbody>
+            </motion.table>
+          </div>
           <Pagination
             pageOptions={pageOptions}
             nextPage={nextPage}
@@ -152,6 +179,9 @@ export const ReactTable = ({
       ) : (
         <div className="flex justify-center items-center">
           {/* <SyncLoader color="#36d7b7" size={20} /> */}
+          <h1 className="sticky left-0 font-extrabold text-xl text-gray-600 border-b-2 p-2 mb-10">
+            {tableName}
+          </h1>
           <h1 className="text-2xl font-bold text-gray-600">{message}</h1>
         </div>
       )}

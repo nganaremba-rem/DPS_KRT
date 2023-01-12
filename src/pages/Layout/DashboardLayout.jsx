@@ -15,7 +15,7 @@ const DashboardLayout = ({ children, ...props }) => {
         className={`${dynamicClass} transition-all ease-linear bg-slate-100 min-h-screen`}
       >
         <Navbar />
-        <div className="p-5 flex justify-center  items-center">
+        <div className="px-2 sm:px-5 py-2 flex justify-center  items-center">
           <Suspense fallback={<MainSkeleton />}>
             <Outlet />
           </Suspense>

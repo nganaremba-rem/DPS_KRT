@@ -8,6 +8,7 @@ const MainSkeleton = () => {
       variant="rounded"
       height={"85vh"}
       width={"100%"}
+      className="mx-10"
     />
   );
 };

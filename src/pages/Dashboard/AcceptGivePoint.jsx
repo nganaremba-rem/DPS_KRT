@@ -1,18 +1,15 @@
-import { Alert, Modal, Slide, Snackbar } from "@mui/material";
-import React, { useMemo, useState } from "react";
-import { useEffect } from "react";
+import { Modal } from "@mui/material";
+import React, { useEffect, useMemo, useState } from "react";
 import { AiFillCloseCircle } from "react-icons/ai";
 import { useMutation, useQuery, useQueryClient } from "react-query";
 import { acceptGivePoint, postAcceptGivePoint } from "../../api/Api";
+import { Loading } from "../../components";
 import ButtonWithLoading from "../../components/Form/ButtonWithLoading";
 import MainSkeleton from "../../components/MainSkeleton";
 import { ReactTable } from "../../components/ReactTable";
+import SnackbarCustom from "../../components/SnackbarCustom";
 import useAuth from "../../hooks/useAuth";
 import { getTableCols, getTableData } from "../../reactTableFn";
-
-function TransitionLeft(props) {
-  return <Slide {...props} direction="left" />;
-}
 
 const ModifyPoint = ({
   id,
@@ -31,7 +28,7 @@ const ModifyPoint = ({
     mutate(formData, {
       onSuccess: (res) => {
         console.log(res);
-        if (res?.data?.status?.code === "500") {
+        if (res?.data?.status?.code !== "200") {
           setSeverity("error");
           setMessage(res?.data?.status?.message);
         } else {
@@ -39,7 +36,7 @@ const ModifyPoint = ({
           setMessage("Accepted by Modifying");
         }
         close(false);
-        showSnackbar(TransitionLeft);
+        showSnackbar();
         queryClient.invalidateQueries("acceptGivePoint");
       },
     });
@@ -97,8 +94,7 @@ const AcceptGivePoint = () => {
   const [severity, setSeverity] = useState("success");
   const [message, setMessage] = useState("");
 
-  const showSnackbar = (Transition) => {
-    setTransition(() => Transition);
+  const showSnackbar = () => {
     setToast((prev) => ({ ...prev, open: true }));
   };
 
@@ -141,12 +137,12 @@ const AcceptGivePoint = () => {
     });
 
     useEffect(() => {
-      if (isLoadingAccept || isLoadingDeny || isLoadingModify) {
+      if (isLoadingAccept || isLoadingDeny) {
         setManualLoading(true);
       } else {
         setManualLoading(false);
       }
-    }, [isLoadingAccept, isLoadingDeny, isLoadingModify]);
+    }, [isLoadingAccept, isLoadingDeny]);
 
     // REACT-TABLE settting columns and data
     const columns = useMemo(() => {
@@ -188,14 +184,14 @@ const AcceptGivePoint = () => {
                     mutateAccept(data, {
                       onSuccess: (res) => {
                         console.log(res);
-                        if (res?.data?.status?.code === "500") {
+                        if (res?.data?.status?.code !== "200") {
                           setSeverity("error");
                           setMessage(res?.data?.status?.message);
                         } else {
                           setSeverity("success");
                           setMessage("Accepted");
                         }
-                        showSnackbar(TransitionLeft);
+                        showSnackbar();
                         queryClient.invalidateQueries("acceptGivePoint");
                       },
                     });
@@ -228,14 +224,14 @@ const AcceptGivePoint = () => {
                       mutateDeny(data, {
                         onSuccess: (res) => {
                           console.log(res);
-                          if (res?.data?.status?.code === "500") {
+                          if (res?.data?.status?.code !== "200") {
                             setSeverity("error");
                             setMessage(res?.data?.status?.message);
                           } else {
                             setSeverity("error");
                             setMessage("Denied");
                           }
-                          showSnackbar(TransitionLeft);
+                          showSnackbar();
                           queryClient.invalidateQueries("acceptGivePoint");
                         },
                       });
@@ -274,23 +270,15 @@ const AcceptGivePoint = () => {
 
     return (
       <>
-        <Snackbar
-          autoHideDuration={2000}
-          TransitionComponent={transition}
+        <SnackbarCustom
           open={open}
-          onClose={handleClose}
+          alertText={message}
           anchorOrigin={{ vertical, horizontal }}
-          key={transition ? transition.name : ""}
-        >
-          <Alert
-            severity={severity}
-            variant="filled"
-            sx={{ width: "100%" }}
-            onClose={handleClose}
-          >
-            {message}
-          </Alert>
-        </Snackbar>
+          autoHideDuration={2000}
+          onClose={handleClose}
+          severity={severity}
+        />
+
         <Modal
           open={modal}
           children={
@@ -310,7 +298,14 @@ const AcceptGivePoint = () => {
           }
         />
 
-        <Modal open={manualLoading} children={<>Loading</>} />
+        <Modal
+          open={manualLoading}
+          children={
+            <>
+              <Loading />
+            </>
+          }
+        />
         <ReactTable
           columns={columns}
           data={data}

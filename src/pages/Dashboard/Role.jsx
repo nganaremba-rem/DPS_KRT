@@ -21,13 +21,13 @@ const Role = () => {
 
     // REACT-TABLE settting columns and data
     const columns = useMemo(
-      () => roles?.data && getTableCols(roles.data),
-      [roles?.data],
+      () => roles?.data?.response && getTableCols(roles.data?.response),
+      [roles?.data?.response],
     );
 
     const data = useMemo(
-      () => roles?.data && getTableData(roles.data),
-      [roles?.data],
+      () => roles?.data?.response && getTableData(roles.data?.response),
+      [roles?.data?.response],
     );
 
     if (isLoading) return <MainSkeleton />;

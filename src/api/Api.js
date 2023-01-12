@@ -40,12 +40,27 @@ export const postData = (data, url, options = {}) => {
     .catch((err) => err);
 };
 
-// DELETE Request
+// ? DELETE Request
 
-const deleteRequest = (url) => {
-  return axios.delete(url, {
-    baseURL: baseURL,
-  });
+export const deleteData = (url, data = {}, options = {}) => {
+  return axios
+    .delete(url, data, {
+      ...options,
+      baseURL: baseURL,
+    })
+    .then((res) => res)
+    .catch((err) => err);
+};
+// ? PUT Request
+
+export const putData = (data, url, options = {}) => {
+  return axios
+    .put(url, data, {
+      ...options,
+      baseURL: baseURL,
+    })
+    .then((res) => res)
+    .catch((err) => err);
 };
 
 //  Request functions
@@ -140,19 +155,46 @@ export const fetchBranches = (userId) =>
     headers: {
       userId: userId,
     },
+    params: {
+      ctryCode: "123",
+      langCode: "12",
+    },
   });
 export const fetchRoles = (userId) =>
   fetchData(endpoints.roles, {
     headers: {
       userId: userId,
     },
+    params: {
+      ctryCode: "123",
+      langCode: "12",
+    },
   });
-export const fetchBranchList = (userId) =>
-  fetchData(endpoints.branchList, {
+
+export const fetchBranchManagers = (userId) =>
+  fetchData(endpoints.branchManagers, {
     headers: {
       userId,
     },
+    params: {
+      ctryCode: "123",
+      langCode: "12",
+      role: "BM",
+    },
   });
+
+export const fetchDrivers = (userId) =>
+  fetchData(endpoints.branchManagers, {
+    headers: {
+      userId,
+    },
+    params: {
+      ctryCode: "123",
+      langCode: "12",
+      role: "DR",
+    },
+  });
+
 export const fetchPointsEarnedByDrivers = (userId) =>
   fetchData(endpoints.pointsEarnedByDriver, {
     params: {
@@ -230,6 +272,25 @@ export const createEmployeeApi = (data, userId) =>
     },
     headers: { "Content-Type": "application/json", userId },
   });
+
+export const createBranchPost = (data, userId) =>
+  postData(data, endpoints.createBranchPOST, {
+    params: {
+      ctryCode: "123",
+      langCode: "12",
+    },
+    headers: { "Content-Type": "application/json", userId },
+  });
+
+export const createRolePost = (data, userId) =>
+  postData(data, endpoints.createRolePOST, {
+    params: {
+      ctryCode: "123",
+      langCode: "12",
+    },
+    headers: { "Content-Type": "application/json", userId },
+  });
+
 export const assignCreditPoint = (data, userId) =>
   postData(data, endpoints.assignCreditPoint, {
     params: {
@@ -276,6 +337,86 @@ export const postAcceptGivePoint = (data, userId) => {
   });
 };
 
+// ! PUT Request
+
+export const updateUser = (data, userId) => {
+  return putData(data, endpoints.updateUserPUT, {
+    params: {
+      ctryCode: "123",
+      langCode: "12",
+    },
+    headers: {
+      userId: userId,
+      "Content-Type": "application/json",
+    },
+  });
+};
+
+export const updateBranch = (data, userId) => {
+  return putData(data, endpoints.updateBranchPUT, {
+    params: {
+      ctryCode: "123",
+      langCode: "12",
+    },
+    headers: {
+      userId: userId,
+      "Content-Type": "application/json",
+    },
+  });
+};
+
+export const updateRole = (data, userId) => {
+  return putData(data, endpoints.updateRolePUT, {
+    params: {
+      ctryCode: "123",
+      langCode: "12",
+    },
+    headers: {
+      userId: userId,
+      "Content-Type": "application/json",
+    },
+  });
+};
+
 // ! DELETE request functions
 
-export const LogoutFn = () => deleteRequest(endpoints.logout);
+export const LogoutFn = () => deleteData(endpoints.logout);
+
+export const deleteUser = (userId, data) => {
+  return deleteData(endpoints.deleteUserDel, data, {
+    params: {
+      ctryCode: "123",
+      langCode: "12",
+    },
+    headers: {
+      userId: userId,
+      "Content-Type": "application/json",
+    },
+  });
+};
+
+export const deleteBranch = (userId, data) => {
+  return deleteData(endpoints.deleteBranchDel, data, {
+    params: {
+      ctryCode: "123",
+      langCode: "12",
+    },
+    headers: {
+      userId: userId,
+      "Content-Type": "application/json",
+    },
+  });
+};
+
+export const deleteRole = (userId, data) => {
+  return deleteData(endpoints.deleteRoleDel, data, {
+    params: {
+      ctryCode: "123",
+      langCode: "12",
+    },
+    headers: {
+      userId: userId,
+      "Content-Type": "application/json",
+    },
+  });
+};

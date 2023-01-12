@@ -4,6 +4,7 @@ import { useEffect } from "react";
 import LoadingButton from "./LoadingButton";
 
 const ButtonWithLoading = ({
+  key,
   isLoading = false,
   text,
   color = "primary",
@@ -20,14 +21,15 @@ const ButtonWithLoading = ({
   return (
     <>
       {isLoading === true ? (
-        <LoadingButton />
+        <LoadingButton key={key} />
       ) : (
         <Button
+          key={key}
           color={color}
           size={size}
           variant={variant}
           endIcon={endIcon}
-          //   className={"col-span-full"}
+          className={"col-span-full"}
           type={type}
           onClick={onClick}
         >

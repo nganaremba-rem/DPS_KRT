@@ -4,7 +4,7 @@ import { FcSettings } from "react-icons/fc";
 import { lazyLoad } from "../lazyLoad";
 
 const MenuItem = ({ name, custFnc, to, icon }) => {
-  const linkClass = `menu-items cursor-pointer rounded-lg px-3 py-2 w-full  flex gap-4  items-center `;
+  const linkClass = `menu-items cursor-pointer rounded-lg px-2 py-2 w-full  flex gap-2  items-center `;
   return (
     <NavLink
       onClick={custFnc}
@@ -16,8 +16,8 @@ const MenuItem = ({ name, custFnc, to, icon }) => {
       }
       title={name}
     >
-      <div className="icon">{icon || <FcSettings size={25} />}</div>
-      <button className="font-bold whitespace-nowrap overflow-hidden text-ellipsis">
+      <div className="icon -mt-1">{icon || <FcSettings size={25} />}</div>
+      <button className="font-bold text-md whitespace-nowrap overflow-hidden text-ellipsis">
         {name}
       </button>
     </NavLink>

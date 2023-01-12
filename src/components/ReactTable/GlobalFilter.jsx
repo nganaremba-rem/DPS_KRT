@@ -18,9 +18,11 @@ export const GlobalFilter = ({
   return (
     <>
       <div className="self-start flex items-center gap-4 mb-5 sticky left-2">
-        <label htmlFor="search">Search</label>
+        <label htmlFor="search" className="text-gray-600">
+          Search
+        </label>
         <input
-          className="px-5 py-2 border border-slate-400 focus:ring outline-none rounded-lg"
+          className="px-3 py-1 border focus:ring outline-none rounded-lg"
           type="search"
           name="search"
           id="search"

@@ -18,14 +18,14 @@ export const Pagination = ({
         <div className="prev-next flex gap-2 items-center">
           <button onClick={() => gotoPage(0)}>{"<<<"}</button>
           <button
-            className="bg-red-600 disabled:cursor-not-allowed disabled:bg-red-300 text-white py-1 px-2 rounded"
+            className="bg-red-600 disabled:cursor-not-allowed text-sm disabled:bg-red-300 text-white py-1 px-2 rounded"
             disabled={!canPreviousPage}
             onClick={() => previousPage()}
           >
             Previous
           </button>
           <button
-            className="bg-green-600 disabled:cursor-not-allowed disabled:bg-green-300 text-white py-1 px-2 rounded"
+            className="bg-green-600 disabled:cursor-not-allowed text-sm disabled:bg-green-300 text-white py-1 px-2 rounded"
             disabled={!canNextPage}
             onClick={() => nextPage()}
           >
@@ -33,13 +33,13 @@ export const Pagination = ({
           </button>
           <button onClick={() => gotoPage(pageCount - 1)}>{">>>"}</button>
         </div>
-        <span className="page-number  shrink-0 bg-slate-300 p-2 rounded text-slate-700">
+        <span className="page-number text-sm  shrink-0 bg-slate-300 px-2 py-1 rounded text-slate-700">
           Page{" "}
           {pageOptions.length !== 0
             ? pageIndex + 1 + " of " + pageOptions.length
             : "0 of 0"}
         </span>
-        <div className="goto-area shrink-0 text-slate-600 flex gap-2 items-center">
+        <div className="goto-area text-sm shrink-0 text-slate-600 flex gap-2 items-center">
           <label htmlFor="goto">Goto Page</label>
           <input
             className="w-[5rem] rounded p-1 flex items-center justify-center border-slate-300 border outline-none focus:ring"
@@ -53,7 +53,7 @@ export const Pagination = ({
           />
         </div>
         <select
-          className="p-2 rounded-lg focus:ring outline-none"
+          className="px-2 py-1 rounded-lg focus:ring text-sm outline-none"
           value={pageSize}
           onChange={(e) => setPageSize(Number(e.target.value))}
           name="pageSize"

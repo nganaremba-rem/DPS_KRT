@@ -1,18 +1,15 @@
-import { Alert, Modal, Slide, Snackbar } from "@mui/material";
-import React, { useMemo, useState } from "react";
-import { useEffect } from "react";
+import { Modal } from "@mui/material";
+import React, { useEffect, useMemo, useState } from "react";
 import { AiFillCloseCircle } from "react-icons/ai";
 import { useMutation, useQuery, useQueryClient } from "react-query";
-import { fetchPointsRequested, acceptPointRequest } from "../../api/Api";
+import { acceptPointRequest, fetchPointsRequested } from "../../api/Api";
+import { Loading } from "../../components";
 import ButtonWithLoading from "../../components/Form/ButtonWithLoading";
 import MainSkeleton from "../../components/MainSkeleton";
 import { ReactTable } from "../../components/ReactTable";
+import SnackbarCustom from "../../components/SnackbarCustom";
 import useAuth from "../../hooks/useAuth";
 import { getTableCols, getTableData } from "../../reactTableFn";
-
-function TransitionLeft(props) {
-  return <Slide {...props} direction="left" />;
-}
 
 const ModifyPoint = ({
   id,
@@ -39,7 +36,7 @@ const ModifyPoint = ({
           setMessage("Accepted by Modifying");
         }
         close(false);
-        showSnackbar(TransitionLeft);
+        showSnackbar();
         queryClient.invalidateQueries("pointsRequested");
       },
     });
@@ -97,8 +94,7 @@ const PointRequest = () => {
   const [severity, setSeverity] = useState("success");
   const [message, setMessage] = useState("");
 
-  const showSnackbar = (Transition) => {
-    setTransition(() => Transition);
+  const showSnackbar = () => {
     setToast((prev) => ({ ...prev, open: true }));
   };
 
@@ -141,7 +137,7 @@ const PointRequest = () => {
     });
 
     useEffect(() => {
-      if (isLoadingAccept || isLoadingDeny || isLoadingModify) {
+      if (isLoadingAccept || isLoadingDeny) {
         setManualLoading(true);
       } else {
         setManualLoading(false);
@@ -195,7 +191,7 @@ const PointRequest = () => {
                           setSeverity("success");
                           setMessage("Accepted");
                         }
-                        showSnackbar(TransitionLeft);
+                        showSnackbar();
                         queryClient.invalidateQueries("pointsRequested");
                       },
                     });
@@ -235,7 +231,7 @@ const PointRequest = () => {
                             setSeverity("error");
                             setMessage("Denied");
                           }
-                          showSnackbar(TransitionLeft);
+                          showSnackbar();
                           queryClient.invalidateQueries("pointsRequested");
                         },
                       });
@@ -274,23 +270,13 @@ const PointRequest = () => {
 
     return (
       <>
-        <Snackbar
-          autoHideDuration={2000}
-          TransitionComponent={transition}
+        <SnackbarCustom
+          severity={severity}
           open={open}
-          onClose={handleClose}
+          alertText={message}
           anchorOrigin={{ vertical, horizontal }}
-          key={transition ? transition.name : ""}
-        >
-          <Alert
-            severity={severity}
-            variant="filled"
-            sx={{ width: "100%" }}
-            onClose={handleClose}
-          >
-            {message}
-          </Alert>
-        </Snackbar>
+          onClose={handleClose}
+        />
         <Modal
           open={modal}
           children={
@@ -310,7 +296,14 @@ const PointRequest = () => {
           }
         />
 
-        <Modal open={manualLoading} children={<>Loading</>} />
+        <Modal
+          open={manualLoading}
+          children={
+            <>
+              <Loading />
+            </>
+          }
+        />
         <ReactTable
           columns={columns}
           data={data}
