@@ -12,8 +12,8 @@ export const getAPI = async (url) => {
 // const baseURL = "https://krt-node-server-production-695a.up.railway.app";
 // const baseURL =
 //   "https://krt-backend-json-server-production-5cc1.up.railway.app";
-// const baseURL = "http://burn.pagekite.me";
-const baseURL = "https://krtdps.netlify.app/api";
+const baseURL = "http://burn.pagekite.me";
+// const baseURL = "https://krtdps.netlify.app/api";
 
 export const Axios = axios.create({
   baseURL,
