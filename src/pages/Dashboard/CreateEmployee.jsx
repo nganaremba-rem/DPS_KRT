@@ -1,20 +1,18 @@
-import React, { useRef, useState } from "react";
-import { AiOutlinePlusCircle } from "react-icons/ai";
-import { useMutation, useQuery } from "react-query";
-import { v4 } from "uuid";
-import {
-  createEmployee,
-  createEmployeeApi,
-  fetchBranches,
-  fetchRoles,
-} from "../../api/Api";
-import FormPage from "../../components/FormPage";
-import MainSkeleton from "../../components/MainSkeleton";
+import { useState } from "react";
+import { useMutation } from "react-query";
+import { createEmployeeApi, fetchBranches, fetchRoles } from "../../api/Api";
+import ButtonWithLoading from "../../components/Form/ButtonWithLoading";
+import DateInput from "../../components/Form/DateInput";
+import FormContainer from "../../components/Form/FormContainer";
+import SelectOption from "../../components/Form/SelectOption";
+import TextField from "../../components/Form/TextField";
 import SnackbarCustom from "../../components/SnackbarCustom";
 import useAuth from "../../hooks/useAuth";
+import { AiOutlinePlusCircle } from "react-icons/ai";
 
 const CreateEmployee = () => {
   const { user } = useAuth();
+  const [formData, setFormData] = useState({});
   const [toast, setToast] = useState({
     open: false,
   });
@@ -23,86 +21,155 @@ const CreateEmployee = () => {
     severity: "success",
   });
 
-  const { data, isLoading, isError, error } = useQuery(
-    "createEmployee",
-    createEmployee,
-  );
-
-  const handleClose = () => setToast((prev) => ({ ...prev, open: false }));
   const openSnackbar = () => setToast((prev) => ({ ...prev, open: true }));
+  const handleClose = () => setToast((prev) => ({ ...prev, open: false }));
 
-  const {
-    mutate,
-    isLoading: isLoadingCreating,
-    isError: isErrorCreating,
-    error: errorCreating,
-  } = useMutation({
+  //   ! onSubmit
+  const { mutate, isLoading: isLoadingCreatingUser } = useMutation({
     mutationFn: (data) => createEmployeeApi(data, user.userId),
   });
 
-  const { data: roleListData, isLoading: isLoadingRoleList } = useQuery(
-    "roles",
-    () => fetchRoles(user.userId),
-  );
-  const { data: branchListData, isLoading: isLoadingBranchList } = useQuery(
-    "branches",
-    () => fetchBranches(user.userId),
-  );
-
-  const formRef = useRef();
-
-  const handleSubmit = (data) => {
-    mutate(data, {
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    const formData = Object.fromEntries(new FormData(e.target));
+    mutate(formData, {
       onSuccess: (res) => {
         console.log(res);
-        formRef.current.reset();
-        if (res?.data?.status?.code !== "500") {
-          setAlertOptions(() => ({
+        if (res?.data?.status?.code !== "200") {
+          setAlertOptions({
+            text: res.data.status.message,
             severity: "error",
-            text: res?.data?.status?.message,
-          }));
+          });
         } else {
-          setAlertOptions(() => ({
-            severity: "success",
+          setAlertOptions({
             text: "Created Successfully",
-          }));
+            severity: "success",
+          });
         }
         openSnackbar();
       },
     });
   };
 
-  if (isLoading) return <MainSkeleton />;
-  if (isError) return <h1>{error.message}</h1>;
-
   return (
     <>
       <SnackbarCustom
-        open={toast.open}
-        severity={alertOptions.severity}
         alertText={alertOptions.text}
         onClose={handleClose}
+        open={toast.open}
+        severity={alertOptions.severity}
       />
 
-      <FormPage
-        key={v4()}
-        ref={formRef}
-        formFieldsData={data.data}
-        formTitle="Create New Employee"
-        submitBtnText={"Create"}
-        custSubmitFnc={handleSubmit}
-        SubmitButtonEndIcon={<AiOutlinePlusCircle />}
-        extraData={{
-          roleList: {
-            data: roleListData,
-            isLoading: isLoadingRoleList,
-          },
-          branchList: {
-            data: branchListData,
-            isLoading: isLoadingBranchList,
-          },
-        }}
-      />
+      <FormContainer formName="Create Employee">
+        <form
+          onSubmit={handleSubmit}
+          action=""
+          className="grid md:grid-cols-2 gap-3"
+        >
+          <TextField
+            label="User ID"
+            name={"userId"}
+            id="userId"
+            type="text"
+            onChange={setFormData}
+            required={true}
+            state={formData}
+          />
+          <TextField
+            label="Employee Name"
+            name={"userName"}
+            id="userName"
+            type="text"
+            required={true}
+            onChange={setFormData}
+            state={formData}
+          />
+          <TextField
+            label="Password"
+            name={"passWd"}
+            id="passWd"
+            type="password"
+            required={true}
+          />
+          <TextField
+            label="PIN"
+            name={"divisionLc"}
+            id="divisionLc"
+            type="text"
+            required={true}
+          />
+          <SelectOption
+            label={"Type of User"}
+            name="roleCd"
+            id={"roleCd"}
+            queryKey={"roles"}
+            fnc={fetchRoles}
+            options={{
+              label: "roleNm",
+              value: "roleCd",
+            }}
+            required={true}
+          />
+          <SelectOption
+            label={"Branch Office Code"}
+            name="divCd"
+            id={"divCd"}
+            queryKey={"branches"}
+            fnc={fetchBranches}
+            options={{
+              label: "divNm",
+              value: "divCd",
+            }}
+            required={true}
+          />
+          <TextField
+            label="Family Name"
+            name={"userSurnm"}
+            id="userSurnm"
+            type="text"
+            required={true}
+          />
+          <TextField
+            label="First Name"
+            name={"userGivnm"}
+            id="userGivnm"
+            type="text"
+            required={true}
+          />
+          <TextField
+            label="Furigana Family Name（カナ）"
+            name={"userSurnmk"}
+            id="userSurnmk"
+            type="text"
+            required={true}
+          />
+          <TextField
+            label="Furigana of First Name（カナ）"
+            name={"userGivnmk"}
+            id="userGivnmk"
+            type="text"
+            required={true}
+          />
+          <TextField
+            label="Email Address"
+            name={"email"}
+            id="email"
+            type="email"
+            required={true}
+          />
+          <DateInput
+            field={"Pass Expiry Date"}
+            id="passExpDt"
+            name={"passExpDt"}
+            required={true}
+          />
+          <ButtonWithLoading
+            isLoading={isLoadingCreatingUser}
+            text={"Create"}
+            endIcon={<AiOutlinePlusCircle />}
+          />
+        </form>
+      </FormContainer>
     </>
   );
 };

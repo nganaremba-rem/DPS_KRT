@@ -50,7 +50,7 @@ const Sidebar = () => {
               to={"/dashboard"}
             >
               <AiOutlineHome size={24} color="#36c1e3" />
-              <div className="text-center mt-1">Dashboard Home</div>
+              <div className="text-center mt-1 text-sm">Dashboard Home</div>
             </NavLink>
             <MenuItems closeSidebar={closeSidebar} />
           </div>

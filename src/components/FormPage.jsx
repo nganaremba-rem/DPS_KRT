@@ -1,5 +1,13 @@
 import axios from "axios";
 import React from "react";
+import {
+  Axios,
+  fetchBranches,
+  fetchBranchManagers,
+  fetchDrivers,
+  fetchGivePointValues,
+  fetchRoles,
+} from "../api/Api";
 import useAuth from "../hooks/useAuth";
 import ButtonWithLoading from "./Form/ButtonWithLoading";
 import SelectOption from "./Form/SelectOption";
@@ -15,9 +23,9 @@ const FormPage = React.forwardRef(
       custSubmitFnc,
       formFieldsData,
       submitBtnText,
-      submitButtonEndIcon,
+      submitButtonEndIcon = <></>,
       isLoading = false,
-      extraData,
+      extraData = {},
     },
     ref,
   ) => {
@@ -42,13 +50,13 @@ const FormPage = React.forwardRef(
               },
             });
           } else {
-            // dataArr = await Axios.get(endpoint, {
-            //   params: { ...params },
-            //   headers: {
-            //     userId: user.userId,
-            //   },
-            // });
-            dataArr = endpoint;
+            dataArr = await Axios.get(endpoint, {
+              params: { ...params },
+              headers: {
+                userId: user.userId,
+              },
+            });
+            // dataArr = endpoint;
           }
           const result = dataArr.data.response.map((data) => {
             return {
@@ -89,61 +97,51 @@ const FormPage = React.forwardRef(
             }
 
             if (input.type === "select") {
-              let optionFnc;
+              let fnc, queryKey, options;
               switch (input.devId) {
                 case "givePointValue":
-                  optionFnc = () => {
-                    return getOptionsData(input.endPoint, {
-                      label: "label",
-                      value: "value",
-                      local: true,
-                    });
+                  options = {
+                    label: "label",
+                    value: "value",
                   };
-                  optionFnc();
+                  queryKey = "givePointValues";
+                  fnc = fetchGivePointValues;
                   break;
 
                 case "drivers":
-                  optionFnc = () => {
-                    return getOptionsData(extraData.drivers.data, {
-                      label: "userName",
-                      value: "userId",
-                      local: false,
-                    });
+                  options = {
+                    label: "userName",
+                    value: "userId",
                   };
-                  optionFnc();
+                  queryKey = "drivers";
+                  fnc = fetchDrivers;
                   break;
 
                 case "roleCd":
-                  optionFnc = () => {
-                    return getOptionsData(extraData.roleList.data, {
-                      label: "roleNm",
-                      value: "roleCd",
-                      local: false,
-                    });
+                  options = {
+                    label: "userName",
+                    value: "userId",
                   };
-                  optionFnc();
+                  queryKey = "roles";
+                  fnc = fetchRoles;
                   break;
 
                 case "divCd":
-                  optionFnc = () => {
-                    return getOptionsData(extraData.branchList.data, {
-                      label: "divNm",
-                      value: "divCd",
-                      local: false,
-                    });
+                  options = {
+                    label: "divNm",
+                    value: "divCd",
                   };
-                  optionFnc();
+                  queryKey = "branches";
+                  fnc = fetchBranches;
                   break;
 
                 case "managerId":
-                  optionFnc = () => {
-                    return getOptionsData(extraData.branchManagers.data, {
-                      label: "userName",
-                      value: "userId",
-                      local: false,
-                    });
+                  options = {
+                    label: "userName",
+                    value: "userId",
                   };
-                  optionFnc();
+                  queryKey = "branchManagers";
+                  fnc = fetchBranchManagers;
                   break;
 
                 default:
@@ -157,8 +155,10 @@ const FormPage = React.forwardRef(
                   name={input.name}
                   key={input.name}
                   label={input.field}
-                  optionsFnc={optionFnc}
                   required={input.required}
+                  fnc={fnc}
+                  options={options}
+                  queryKey={queryKey}
                 />
               );
             }

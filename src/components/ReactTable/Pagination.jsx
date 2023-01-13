@@ -13,7 +13,7 @@ export const Pagination = ({
   pageCount,
 }) => {
   return (
-    <>
+    <div className="w-full overflow-auto">
       <div className="flex justify-between items-center pt-5 gap-2">
         <div className="prev-next flex gap-2 items-center">
           <button onClick={() => gotoPage(0)}>{"<<<"}</button>
@@ -68,6 +68,6 @@ export const Pagination = ({
           })}
         </select>
       </div>
-    </>
+    </div>
   );
 };

@@ -11,16 +11,11 @@ import MainSkeleton from "../../components/MainSkeleton";
 import { useStateContext } from "../../context/ContextProvider";
 import { endpoints } from "../../endpoints";
 
-const EditPage = ({ pageName, onSubmitHandlerFnc, route }) => {
+const EditPage = ({ pageName, onSubmitHandlerFnc, id, data = [] }) => {
   const { setOpenModal } = useStateContext();
 
-  const { data, isLoading, isError, error } = useQuery(
-    ["employee", route],
-    () => {
-      const url = `${endpoints.baseUrl}/${route}`;
-      return fetchData(url);
-    },
-  );
+  data = data.filter((item) => item.userId === id)[0];
+  console.log(data);
 
   const Android12Switch = styled(Switch)(({ theme }) => ({
     padding: 8,
@@ -55,8 +50,8 @@ const EditPage = ({ pageName, onSubmitHandlerFnc, route }) => {
     },
   }));
 
-  if (isLoading) return <MainSkeleton />;
-  if (isError) return <h1>{error?.message}</h1>;
+  // if (isLoading) return <MainSkeleton />;
+  // if (isError) return <h1>{error?.message}</h1>;
 
   return (
     <>
@@ -73,21 +68,21 @@ const EditPage = ({ pageName, onSubmitHandlerFnc, route }) => {
         </h1>
         <form
           onSubmit={onSubmitHandlerFnc}
-          className={"grid md:grid-cols-2 gap-4 items-center "}
+          className={
+            "grid md:grid-cols-2 gap-4 items-center overflow-y-auto h-full"
+          }
         >
-          {Object.keys(data.data).map((key) => {
-            if (typeof data.data[key] === "boolean") {
+          {Object.keys(data).map((key) => {
+            if (typeof data[key] === "boolean") {
               return (
                 <FormControlLabel
                   key={key}
-                  control={<Android12Switch defaultChecked={data.data[key]} />}
+                  control={<Android12Switch defaultChecked={data[key]} />}
                   label={key}
                 />
               );
             }
-            return (
-              <TextField key={key} label={key} value={`${data.data[key]}`} />
-            );
+            return <TextField key={key} label={key} value={`${data[key]}`} />;
           })}
           <Button type="submit" className="col-span-full" variant="contained">
             Update

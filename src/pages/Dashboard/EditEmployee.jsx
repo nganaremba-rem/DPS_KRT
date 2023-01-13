@@ -18,13 +18,18 @@ const EditEmployee = () => {
     const { setOpenModal, openModal } = useStateContext();
     const [editUserID, setEditUserID] = useState();
     const { user } = useAuth();
+    const [empData, setEmpData] = useState([]);
 
     const {
       isLoading,
       isError,
       error,
       data: employees,
-    } = useQuery("employee", () => fetchEmployees(user.userId));
+    } = useQuery("employee", () => fetchEmployees(user.userId), {
+      onSuccess: (data) => {
+        setEmpData(data.data.response);
+      },
+    });
 
     // REACT-TABLE settting columns and data
     const columns = useMemo(
@@ -84,7 +89,7 @@ const EditEmployee = () => {
             return (
               <button
                 onClick={() => {
-                  setEditUserID(row.values.id);
+                  setEditUserID(row.values.userId);
                   setOpenModal(true);
                 }}
                 className="bg-violet-500 text-white px-5 py-2 rounded-full"
@@ -114,13 +119,11 @@ const EditEmployee = () => {
           open={openModal}
           onClose={() => setOpenModal(false)}
           closeAfterTransition
-          BackdropProps={{
-            timeout: 500,
-          }}
         >
           <>
             <EditPage
-              route={`employee/getEmpById/${editUserID}`}
+              data={empData}
+              id={editUserID}
               pageName={"Edit Employee"}
               onSubmitHandlerFnc={onEditHandler}
             />

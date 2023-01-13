@@ -45,7 +45,7 @@
     "type": "select",
     "name": "divCd",
     "id": "divCd",
-    "endPoint": "/user/getUserByRole",
+    "endPoint": "/branchList",
     "devId": "divCd",
     "required": true
 
@@ -97,13 +97,5 @@
     "id": "passExpDt",
     "devId": "passExpDt",
     "required": true
-  },
-  {
-    "field": "Face Photo",
-    "type": "text",
-    "name": "facePhoto",
-    "id": "facePhoto",
-    "devId": "email",
-    "required": false
   }
 ]

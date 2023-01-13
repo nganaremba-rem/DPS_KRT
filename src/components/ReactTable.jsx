@@ -47,12 +47,12 @@ export const ReactTable = ({
     usePagination,
   );
 
-  const [tableWidth, setTableWidth] = useState(0);
+  // const [tableWidth, setTableWidth] = useState(0);
   const tableRef = useRef();
-  useEffect(() => {
-    setTableWidth(tableRef.current.offsetWidth);
-    console.log(tableRef.current.offsetWidth);
-  }, []);
+  // useEffect(() => {
+  //   setTableWidth(tableRef.current.offsetWidth);
+  //   console.log(tableRef.current.offsetWidth);
+  // }, []);
 
   if (data.length === 0) {
     return (
@@ -87,14 +87,14 @@ export const ReactTable = ({
             globalFilter={globalFilter}
           />
 
-          <div className="overflow-x-auto overflow-y-hidden w-full mb-2">
+          {/* <div className="overflow-x-auto overflow-y-hidden w-full mb-2">
             <div
               className={`h-1`}
               style={{
                 width: `${tableWidth}px`,
               }}
             ></div>
-          </div>
+          </div> */}
           <div className="w-full overflow-x-auto">
             <motion.table
               ref={tableRef}

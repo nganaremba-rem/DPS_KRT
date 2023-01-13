@@ -195,6 +195,9 @@ export const fetchDrivers = (userId) =>
     },
   });
 
+export const fetchGivePointValues = (userId) =>
+  axios.get(endpoints.givePointValuesLocal);
+
 export const fetchPointsEarnedByDrivers = (userId) =>
   fetchData(endpoints.pointsEarnedByDriver, {
     params: {

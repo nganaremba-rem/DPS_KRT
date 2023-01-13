@@ -47,6 +47,7 @@ export const endpoints = {
   postGivePoint: "/points/givePoints",
   postAcceptGivePoint: "/points/approvePoints",
   branchManagers: "/user/getUserByRole",
+  givePointValuesLocal: "/src/assets/givePointsValue.json",
   // Employee POST
   createEmployeePOST: "/user/saveUser",
   updateUserPUT: "/user/updateUser",
