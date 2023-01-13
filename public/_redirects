@@ -1,2 +1,2 @@
 /api/auth/webLogin http://burn.pagekite.me/auth/webLogin 200!
-/api/* http://burn.pagekite.me/:splat 200!
+/api/* http://burn.pagekite.me/* 200!
