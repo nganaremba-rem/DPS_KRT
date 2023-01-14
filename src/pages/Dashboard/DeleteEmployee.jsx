@@ -1,15 +1,13 @@
-import { Modal } from "@mui/material";
 import React, { useMemo, useState } from "react";
-import { useQuery } from "react-query";
-import { fetchEmployees } from "../../api/Api";
-import { Loading } from "../../components";
+import { useMutation, useQuery, useQueryClient } from "react-query";
+import { deleteUser, fetchEmployees } from "../../api/Api";
+import ButtonWithLoading from "../../components/Form/ButtonWithLoading";
 import MainSkeleton from "../../components/MainSkeleton";
 import { ReactTable } from "../../components/ReactTable";
 import { useStateContext } from "../../context/ContextProvider";
 import useAuth from "../../hooks/useAuth";
-import { lazyLoad } from "../../lazyLoad";
+import { useSnackbar } from "../../hooks/useSnackbar";
 import { getTableCols, getTableData } from "../../reactTableFn";
-import EditPage from "./EditPage";
 
 // const ReactTable = lazyLoad("./components/ReactTable", "ReactTable");
 
@@ -18,6 +16,8 @@ const DeleteEmployee = () => {
     const { setOpenModal, openModal } = useStateContext();
     const [editUserID, setEditUserID] = useState();
     const { user } = useAuth();
+    const { setAlertOptions, openSnackbar } = useSnackbar();
+    const queryClient = useQueryClient();
 
     const {
       isLoading,
@@ -26,6 +26,32 @@ const DeleteEmployee = () => {
       data: employees,
     } = useQuery("employee", () => fetchEmployees(user.userId));
 
+    const { mutate, isLoading: isLoadingDeleteUser } = useMutation({
+      mutationFn: (data) => deleteUser(user.userId, data),
+      onSuccess: (res) => {
+        console.log(res);
+        if (res?.data?.status?.code !== "200") {
+          setAlertOptions({
+            text: res?.data?.status?.subMessages[3],
+            severity: "error",
+          });
+        } else {
+          setAlertOptions({
+            text: "Deleted Successfully",
+            severity: "success",
+          });
+          queryClient.invalidateQueries("employee");
+        }
+        openSnackbar();
+      },
+    });
+
+    const handleDeleteUser = (id) => {
+      const readyData = {
+        userId: id,
+      };
+      mutate(readyData);
+    };
     // REACT-TABLE settting columns and data
     const columns = useMemo(
       () =>
@@ -82,14 +108,20 @@ const DeleteEmployee = () => {
           Header: "Delete",
           Cell: ({ row }) => {
             return (
-              <button
-                onClick={() =>
-                  window.confirm("Are you sure you want to delete?")
-                }
+              <ButtonWithLoading
+                isLoading={isLoadingDeleteUser}
+                color="error"
+                text="Delete"
+                onClick={() => {
+                  if (
+                    window.confirm(
+                      `Are you sure you want to delete User: ${row.values.userId}`,
+                    )
+                  )
+                    handleDeleteUser(row.values.userId);
+                }}
                 className="bg-red-700 text-white px-5 py-2 rounded-full"
-              >
-                Delete
-              </button>
+              />
             );
           },
         },
@@ -105,26 +137,8 @@ const DeleteEmployee = () => {
           columns={columns}
           data={data}
           tableHooks={tableHooks}
-          tableName={"Edit Employees"}
+          tableName={"Delete Employees"}
         />
-        <Modal
-          aria-labelledby="transition-modal-title"
-          aria-describedby="transition-modal-description"
-          open={openModal}
-          onClose={() => setOpenModal(false)}
-          closeAfterTransition
-          BackdropProps={{
-            timeout: 500,
-          }}
-        >
-          <>
-            <EditPage
-              route={`employee/getEmpById/${editUserID}`}
-              pageName={"Edit Employee"}
-              onSubmitHandlerFnc={onEditHandler}
-            />
-          </>
-        </Modal>
       </>
     );
   } catch (err) {

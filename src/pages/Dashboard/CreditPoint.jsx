@@ -1,5 +1,4 @@
-import { Modal } from "@mui/material";
-import React, { useState } from "react";
+import React, { useRef } from "react";
 import { useMutation, useQuery } from "react-query";
 import {
   assignCreditPoint,
@@ -9,27 +8,13 @@ import {
 import FormPage from "../../components/FormPage";
 import MainSkeleton from "../../components/MainSkeleton";
 import useAuth from "../../hooks/useAuth";
-import { TiTick } from "react-icons/ti";
-import { useRef } from "react";
-import Success from "../../components/Success";
-import SnackbarCustom from "../../components/SnackbarCustom";
+import { useSnackbar } from "../../hooks/useSnackbar";
 
 const CreditPoint = () => {
   try {
     const { user } = useAuth();
-    const [isSuccess, setIsSuccess] = useState(false);
     const formRef = useRef();
-    const [alertOptions, setAlertOptions] = useState({
-      text: "",
-      severity: "success",
-    });
-    const [toast, setToast] = useState({
-      open: false,
-      anchorOrigin: { vertical: "top", horizontal: "right" },
-    });
-
-    const handleClose = () => setToast((prev) => ({ ...prev, open: false }));
-    const openSnackbar = () => setToast((prev) => ({ ...prev, open: true }));
+    const { setAlertOptions, openSnackbar } = useSnackbar();
 
     const { data, isLoading, isError, error } = useQuery(
       "creditPointFormData",
@@ -52,7 +37,6 @@ const CreditPoint = () => {
     if (isError) return error?.message;
 
     const handleSubmit = (data) => {
-      console.log("Logging Mydata");
       const finalData = {
         ...data,
         giverID: user.userId,
@@ -61,7 +45,6 @@ const CreditPoint = () => {
       mutate(finalData, {
         onSuccess: (res) => {
           console.log(res);
-          // setIsSuccess(true);
           formRef.current.reset();
           if (res?.data?.status?.code !== "200") {
             setAlertOptions({
@@ -75,9 +58,6 @@ const CreditPoint = () => {
             });
           }
           openSnackbar();
-          // setTimeout(() => {
-          //   setIsSuccess(false);
-          // }, 1000);
         },
         onError: (e) => {
           console.log(e);
@@ -87,21 +67,6 @@ const CreditPoint = () => {
 
     return (
       <>
-        {/* <Modal
-          open={isSuccess}
-          children={
-            <>
-              <Success />
-            </>
-          }
-        /> */}
-        <SnackbarCustom
-          open={toast.open}
-          anchorOrigin={toast.anchorOrigin}
-          onClose={handleClose}
-          alertText={alertOptions.text}
-          severity={alertOptions.severity}
-        />
         <FormPage
           formId={"creditPoint"}
           ref={formRef}

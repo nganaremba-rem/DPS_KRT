@@ -1,22 +1,18 @@
-import { Modal } from "@mui/material";
-import React, { useMemo, useState } from "react";
-import { useQuery } from "react-query";
-import { fetchBranches } from "../../api/Api";
-import { Loading } from "../../components";
+import React, { useMemo } from "react";
+import { useMutation, useQuery } from "react-query";
+import { deleteBranch, fetchBranches } from "../../api/Api";
+import ButtonWithLoading from "../../components/Form/ButtonWithLoading";
 import MainSkeleton from "../../components/MainSkeleton";
 import { ReactTable } from "../../components/ReactTable";
-import { useStateContext } from "../../context/ContextProvider";
 import useAuth from "../../hooks/useAuth";
-import { lazyLoad } from "../../lazyLoad";
+import { useSnackbar } from "../../hooks/useSnackbar";
 import { getTableCols, getTableData } from "../../reactTableFn";
-import EditPage from "./EditPage";
 // const ReactTable = lazyLoad("./components/ReactTable", "ReactTable");
 
 const DeleteBranch = () => {
   try {
-    const { openModal, setOpenModal } = useStateContext();
-    const [branchID, setBranchID] = useState();
     const { user } = useAuth();
+    const { setAlertOptions, openSnackbar } = useSnackbar();
     // fetch employees fnc
     const {
       data: branches,
@@ -24,6 +20,33 @@ const DeleteBranch = () => {
       isError,
       error,
     } = useQuery("branches", () => fetchBranches(user.userId));
+
+    const { mutate, isLoading: isLoadingDeleting } = useMutation({
+      mutationFn: (data) => deleteBranch(user.userId, data),
+      onSuccess: (res) => {
+        console.log(res);
+        if (res?.data?.status?.code !== "200") {
+          setAlertOptions({
+            text: res?.data?.status?.subMessages[3],
+            severity: "error",
+          });
+        } else {
+          setAlertOptions({
+            text: "Deleted Successfully",
+            severity: "success",
+          });
+          queryClient.invalidateQueries("branches");
+        }
+        openSnackbar();
+      },
+    });
+
+    const handleDeleteBranch = (id) => {
+      const readyData = {
+        branchCode: id,
+      };
+      mutate(readyData);
+    };
 
     // REACT-TABLE settting columns and data
     const columns = useMemo(
@@ -44,14 +67,15 @@ const DeleteBranch = () => {
           Header: "Delete",
           Cell: ({ row }) => {
             return (
-              <button
-                onClick={() =>
-                  window.confirm("Are you sure you want to delete?")
-                }
-                className="bg-red-700 text-white px-5 py-2 rounded-full"
-              >
-                Delete
-              </button>
+              <ButtonWithLoading
+                onClick={() => {
+                  if (window.confirm("Are you sure you want to delete?"))
+                    handleDeleteBranch(row.values.divCd);
+                }}
+                text="Delete"
+                color="error"
+                isLoading={isLoadingDeleting}
+              />
             );
           },
         },
@@ -66,15 +90,9 @@ const DeleteBranch = () => {
         <ReactTable
           columns={columns}
           data={data}
-          tableName={"Edit Branch"}
+          tableName={"Delete Branch"}
           tableHooks={tableHooks}
         />
-        <Modal open={openModal} onClose={() => setOpenModal(false)}>
-          <EditPage
-            pageName={"Edit Branch"}
-            route={`branch/editBranch/${branchID}`}
-          />
-        </Modal>
       </>
     );
   } catch (err) {

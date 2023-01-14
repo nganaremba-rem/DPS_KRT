@@ -14,6 +14,8 @@ const SelectOption = ({
   queryKey,
   fnc,
   options,
+  dataOptions = [],
+  defaultValue = "",
 }) => {
   const queryClient = useQueryClient();
   const { user } = useAuth();
@@ -57,6 +59,8 @@ const SelectOption = ({
         defaultOptions={true}
         className={"shadow-sm"}
         required={required}
+        defaultValue={defaultValue}
+        options={dataOptions || null}
       />
     </div>
   );

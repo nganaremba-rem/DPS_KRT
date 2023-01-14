@@ -22,8 +22,7 @@ export const Axios = axios.create({
 //  ? GET REQUEST
 
 export const fetchData = (url, options) => {
-  return axios.get(url, {
-    baseURL: baseURL,
+  return Axios.get(url, {
     ...options,
   });
 };
@@ -31,11 +30,9 @@ export const fetchData = (url, options) => {
 //  ? POST REQUEST
 
 export const postData = (data, url, options = {}) => {
-  return axios
-    .post(url, data, {
-      ...options,
-      baseURL: baseURL,
-    })
+  return Axios.post(url, data, {
+    ...options,
+  })
     .then((res) => res)
     .catch((err) => err);
 };
@@ -43,22 +40,19 @@ export const postData = (data, url, options = {}) => {
 // ? DELETE Request
 
 export const deleteData = (url, data = {}, options = {}) => {
-  return axios
-    .delete(url, data, {
-      ...options,
-      baseURL: baseURL,
-    })
+  console.log(options);
+  return Axios.delete(url, data, {
+    ...options,
+  })
     .then((res) => res)
     .catch((err) => err);
 };
 // ? PUT Request
 
 export const putData = (data, url, options = {}) => {
-  return axios
-    .put(url, data, {
-      ...options,
-      baseURL: baseURL,
-    })
+  return Axios.put(url, data, {
+    ...options,
+  })
     .then((res) => res)
     .catch((err) => err);
 };
@@ -392,7 +386,7 @@ export const deleteUser = (userId, data) => {
       langCode: "12",
     },
     headers: {
-      userId: userId,
+      userid: userId,
       "Content-Type": "application/json",
     },
   });

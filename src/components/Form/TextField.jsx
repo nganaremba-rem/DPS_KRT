@@ -1,6 +1,5 @@
 import React, { useState } from "react";
 import { BsFillEyeFill, BsFillEyeSlashFill } from "react-icons/bs";
-import { v4 } from "uuid";
 
 const TextField = React.forwardRef(
   (
@@ -11,8 +10,10 @@ const TextField = React.forwardRef(
       id,
       icon,
       type,
-      value = "",
+      defaultValue = "",
       required,
+      disabled,
+      hidden,
       onChange,
       state,
     },
@@ -33,7 +34,9 @@ const TextField = React.forwardRef(
                 type={shown ? "text" : "password"}
                 name={name || id}
                 id={id || name}
-                defaultValue={value || ""}
+                defaultValue={defaultValue || ""}
+                disabled={disabled}
+                hidden={hidden}
               />
               <div
                 className="p-2 cursor-pointer select-none"
@@ -53,13 +56,16 @@ const TextField = React.forwardRef(
 
     return (
       <div className="grid  md:items-center outline-none focus:shadow-lg  md:gap-1 gap-1">
-        <label
-          className="text-gray-700 flex items-center gap-2"
-          htmlFor={id || name}
-        >
-          <div className="ico text-2xl">{icon}</div>
-          <span>{label}</span>
-        </label>
+        {type !== "hidden" && (
+          <label
+            className="text-gray-700 flex items-center gap-2"
+            htmlFor={id || name}
+          >
+            <div className="ico text-2xl">{icon}</div>
+            <span>{label}</span>
+          </label>
+        )}
+
         <input
           className="px-3 outline-none min-w-[0] lg:min-w-[10rem] py-1 rounded border border-slate-300 shadow-sm"
           type={type}
@@ -67,7 +73,9 @@ const TextField = React.forwardRef(
           id={id || name}
           placeholder={placeholder}
           required={required}
-          defaultValue={value || ""}
+          defaultValue={defaultValue || ""}
+          disabled={disabled}
+          hidden={hidden}
         />
       </div>
     );

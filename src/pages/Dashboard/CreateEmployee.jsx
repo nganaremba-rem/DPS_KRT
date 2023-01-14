@@ -1,4 +1,5 @@
-import { useState } from "react";
+import { useRef } from "react";
+import { AiOutlinePlusCircle } from "react-icons/ai";
 import { useMutation } from "react-query";
 import { createEmployeeApi, fetchBranches, fetchRoles } from "../../api/Api";
 import ButtonWithLoading from "../../components/Form/ButtonWithLoading";
@@ -6,64 +7,47 @@ import DateInput from "../../components/Form/DateInput";
 import FormContainer from "../../components/Form/FormContainer";
 import SelectOption from "../../components/Form/SelectOption";
 import TextField from "../../components/Form/TextField";
-import SnackbarCustom from "../../components/SnackbarCustom";
 import useAuth from "../../hooks/useAuth";
-import { AiOutlinePlusCircle } from "react-icons/ai";
+import { useSnackbar } from "../../hooks/useSnackbar";
 
 const CreateEmployee = () => {
   const { user } = useAuth();
-  const [formData, setFormData] = useState({});
-  const [toast, setToast] = useState({
-    open: false,
-  });
-  const [alertOptions, setAlertOptions] = useState({
-    text: "",
-    severity: "success",
-  });
-
-  const openSnackbar = () => setToast((prev) => ({ ...prev, open: true }));
-  const handleClose = () => setToast((prev) => ({ ...prev, open: false }));
+  const formRef = useRef();
+  const { setAlertOptions, openSnackbar } = useSnackbar();
 
   //   ! onSubmit
   const { mutate, isLoading: isLoadingCreatingUser } = useMutation({
     mutationFn: (data) => createEmployeeApi(data, user.userId),
+    onSuccess: (res) => {
+      console.log(res);
+      if (res?.data?.status?.code !== "200") {
+        setAlertOptions({
+          text: res.data.status.subMessages[3],
+          severity: "error",
+        });
+      } else {
+        formRef.current.reset();
+        setAlertOptions({
+          text: "Created Successfully",
+          severity: "success",
+        });
+      }
+      openSnackbar();
+    },
   });
 
   const handleSubmit = (e) => {
     e.preventDefault();
     const formData = Object.fromEntries(new FormData(e.target));
-    mutate(formData, {
-      onSuccess: (res) => {
-        console.log(res);
-        if (res?.data?.status?.code !== "200") {
-          setAlertOptions({
-            text: res.data.status.message,
-            severity: "error",
-          });
-        } else {
-          setAlertOptions({
-            text: "Created Successfully",
-            severity: "success",
-          });
-        }
-        openSnackbar();
-      },
-    });
+    mutate(formData);
   };
 
   return (
     <>
-      <SnackbarCustom
-        alertText={alertOptions.text}
-        onClose={handleClose}
-        open={toast.open}
-        severity={alertOptions.severity}
-      />
-
       <FormContainer formName="Create Employee">
         <form
+          ref={formRef}
           onSubmit={handleSubmit}
-          action=""
           className="grid md:grid-cols-2 gap-3"
         >
           <TextField
@@ -71,9 +55,7 @@ const CreateEmployee = () => {
             name={"userId"}
             id="userId"
             type="text"
-            onChange={setFormData}
             required={true}
-            state={formData}
           />
           <TextField
             label="Employee Name"
@@ -81,8 +63,6 @@ const CreateEmployee = () => {
             id="userName"
             type="text"
             required={true}
-            onChange={setFormData}
-            state={formData}
           />
           <TextField
             label="Password"

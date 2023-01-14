@@ -1,4 +1,4 @@
-const DateInput = ({ name, field, id, required }) => {
+const DateInput = ({ name, field, id, required, defaultValue }) => {
   return (
     <div key={name} className="flex flex-col gap-2 ">
       <label className="text-gray-700 pl-2" htmlFor={name}>
@@ -10,6 +10,7 @@ const DateInput = ({ name, field, id, required }) => {
         name={name}
         id={id}
         required={required}
+        defaultValue={defaultValue}
       />
     </div>
   );

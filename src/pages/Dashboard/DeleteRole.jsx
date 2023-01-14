@@ -1,12 +1,14 @@
 import { Modal } from "@mui/material";
 import React, { useMemo, useState } from "react";
-import { useQuery } from "react-query";
-import { fetchRoles } from "../../api/Api";
+import { useMutation, useQuery, useQueryClient } from "react-query";
+import { deleteRole, fetchRoles } from "../../api/Api";
 import { Loading } from "../../components";
+import ButtonWithLoading from "../../components/Form/ButtonWithLoading";
 import MainSkeleton from "../../components/MainSkeleton";
 import { ReactTable } from "../../components/ReactTable";
 import { useStateContext } from "../../context/ContextProvider";
 import useAuth from "../../hooks/useAuth";
+import { useSnackbar } from "../../hooks/useSnackbar";
 import { lazyLoad } from "../../lazyLoad";
 import { getTableCols, getTableData } from "../../reactTableFn";
 import EditPage from "./EditPage";
@@ -18,6 +20,8 @@ const DeleteRole = () => {
     const { openModal, setOpenModal } = useStateContext();
     const [roleId, setRoleId] = useState();
     const { user } = useAuth();
+    const queryClient = useQueryClient();
+    const { setAlertOptions, openSnackbar } = useSnackbar();
     // fetch roles fnc
 
     const {
@@ -26,6 +30,33 @@ const DeleteRole = () => {
       isError,
       error,
     } = useQuery("roles", () => fetchRoles(user.userId));
+
+    const { mutate, isLoading: isLoadingDeletingRole } = useMutation({
+      mutationFn: (data) => deleteRole(user.userId, data),
+      onSuccess: (res) => {
+        console.log(res);
+        if (res?.data?.status?.code !== "200") {
+          setAlertOptions({
+            text: res?.data?.status?.subMessages[3],
+            severity: "error",
+          });
+        } else {
+          setAlertOptions({
+            text: "Deleted Role Successfully",
+            severity: "success",
+          });
+          queryClient.invalidateQueries("roles");
+        }
+        openSnackbar();
+      },
+    });
+
+    const handleDeleteRole = (id) => {
+      console.log(id);
+      mutate({
+        privilegeCode: id,
+      });
+    };
 
     // REACT-TABLE settting columns and data
     const columns = useMemo(
@@ -46,14 +77,15 @@ const DeleteRole = () => {
           Header: "Delete",
           Cell: ({ row }) => {
             return (
-              <button
-                onClick={() =>
-                  window.confirm("Are you sure you want to delete?")
-                }
-                className="bg-red-700 text-white px-5 py-2 rounded-full"
-              >
-                Delete
-              </button>
+              <ButtonWithLoading
+                isLoading={isLoadingDeletingRole}
+                onClick={() => {
+                  if (window.confirm("Are you sure you want to delete?"))
+                    handleDeleteRole(row.values.roleCd);
+                }}
+                text={"Delete"}
+                color={"error"}
+              />
             );
           },
         },
@@ -71,13 +103,6 @@ const DeleteRole = () => {
           tableName={"Edit Role"}
           tableHooks={tableHooks}
         />
-        <Modal open={openModal} onClose={() => setOpenModal(false)}>
-          <EditPage
-            pageName={"Edit Roles"}
-            onSubmitHandlerFnc={() => {}}
-            route={`roles/${roleId}`}
-          />
-        </Modal>
       </>
     );
   } catch (err) {

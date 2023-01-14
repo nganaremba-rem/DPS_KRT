@@ -7,8 +7,8 @@ import { Loading } from "../../components";
 import ButtonWithLoading from "../../components/Form/ButtonWithLoading";
 import MainSkeleton from "../../components/MainSkeleton";
 import { ReactTable } from "../../components/ReactTable";
-import SnackbarCustom from "../../components/SnackbarCustom";
 import useAuth from "../../hooks/useAuth";
+import { useSnackbar } from "../../hooks/useSnackbar";
 import { getTableCols, getTableData } from "../../reactTableFn";
 
 const ModifyPoint = ({
@@ -19,8 +19,7 @@ const ModifyPoint = ({
   queryClient,
   isLoading,
   showSnackbar,
-  setSeverity,
-  setMessage,
+  setAlertOptions,
 }) => {
   const handleSubmitModify = (e) => {
     e.preventDefault();
@@ -29,11 +28,15 @@ const ModifyPoint = ({
       onSuccess: (res) => {
         console.log(res);
         if (res?.data?.status?.code !== "200") {
-          setSeverity("error");
-          setMessage(res?.data?.status?.message);
+          setAlertOptions({
+            text: res?.data?.status?.subMessages[3],
+            severity: "error",
+          });
         } else {
-          setSeverity("success");
-          setMessage("Accepted by Modifying");
+          setAlertOptions({
+            text: "Modifiend & Accepted",
+            severity: "success",
+          });
         }
         close(false);
         showSnackbar();
@@ -83,24 +86,7 @@ const AcceptGivePoint = () => {
   const [modPoint, setModPoint] = useState("");
   const queryClient = useQueryClient();
   const [manualLoading, setManualLoading] = useState(false);
-  const [toast, setToast] = useState({
-    vertical: "top",
-    horizontal: "right",
-    open: false,
-  });
-  const { vertical, horizontal, open } = toast;
-  //   for transition
-  const [transition, setTransition] = useState(undefined);
-  const [severity, setSeverity] = useState("success");
-  const [message, setMessage] = useState("");
-
-  const showSnackbar = () => {
-    setToast((prev) => ({ ...prev, open: true }));
-  };
-
-  const handleClose = () => {
-    setToast((prev) => ({ ...prev, open: false }));
-  };
+  const { setAlertOptions, openSnackbar } = useSnackbar();
 
   try {
     const { user } = useAuth();
@@ -185,13 +171,17 @@ const AcceptGivePoint = () => {
                       onSuccess: (res) => {
                         console.log(res);
                         if (res?.data?.status?.code !== "200") {
-                          setSeverity("error");
-                          setMessage(res?.data?.status?.message);
+                          setAlertOptions({
+                            text: res?.data?.status?.subMessages[3],
+                            severity: "error",
+                          });
                         } else {
-                          setSeverity("success");
-                          setMessage("Accepted");
+                          setAlertOptions({
+                            text: "Accepted",
+                            severity: "success",
+                          });
                         }
-                        showSnackbar();
+                        openSnackbar();
                         queryClient.invalidateQueries("acceptGivePoint");
                       },
                     });
@@ -225,13 +215,17 @@ const AcceptGivePoint = () => {
                         onSuccess: (res) => {
                           console.log(res);
                           if (res?.data?.status?.code !== "200") {
-                            setSeverity("error");
-                            setMessage(res?.data?.status?.message);
+                            setAlertOptions({
+                              text: res?.data?.status?.subMessages[3],
+                              severity: "error",
+                            });
                           } else {
-                            setSeverity("error");
-                            setMessage("Denied");
+                            setAlertOptions({
+                              text: "Denied",
+                              severity: "error",
+                            });
                           }
-                          showSnackbar();
+                          openSnackbar();
                           queryClient.invalidateQueries("acceptGivePoint");
                         },
                       });
@@ -270,15 +264,6 @@ const AcceptGivePoint = () => {
 
     return (
       <>
-        <SnackbarCustom
-          open={open}
-          alertText={message}
-          anchorOrigin={{ vertical, horizontal }}
-          autoHideDuration={2000}
-          onClose={handleClose}
-          severity={severity}
-        />
-
         <Modal
           open={modal}
           children={
@@ -290,9 +275,8 @@ const AcceptGivePoint = () => {
                 point={modPoint}
                 close={setModal}
                 isLoading={isLoadingModify}
-                showSnackbar={showSnackbar}
-                setSeverity={setSeverity}
-                setMessage={setMessage}
+                showSnackbar={openSnackbar}
+                setAlertOptions={setAlertOptions}
               />
             </>
           }

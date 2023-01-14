@@ -1,6 +1,7 @@
 import { Modal } from "@mui/material";
 import React, { useMemo, useState } from "react";
 import { useQuery } from "react-query";
+import { Link } from "react-router-dom";
 import { fetchEmployees } from "../../api/Api";
 import { Loading } from "../../components";
 import MainSkeleton from "../../components/MainSkeleton";
@@ -87,15 +88,12 @@ const EditEmployee = () => {
           Header: "Edit",
           Cell: ({ row }) => {
             return (
-              <button
-                onClick={() => {
-                  setEditUserID(row.values.userId);
-                  setOpenModal(true);
-                }}
+              <Link
+                to={`${row.values.userId}`}
                 className="bg-violet-500 text-white px-5 py-2 rounded-full"
               >
                 Edit
-              </button>
+              </Link>
             );
           },
         },

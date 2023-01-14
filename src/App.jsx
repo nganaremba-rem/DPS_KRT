@@ -55,6 +55,9 @@ import DeleteEmployee from "./pages/Dashboard/DeleteEmployee";
 import DeleteRole from "./pages/Dashboard/DeleteRole";
 import DriversPointDisplay from "./pages/Dashboard/DriversPointDisplay";
 import DriversWithDetails from "./pages/Dashboard/DriversPointDisplay";
+import EditBranchForm from "./pages/Dashboard/EditBranchForm";
+import EditEmployeeForm from "./pages/Dashboard/EditEmployeeForm";
+import EditRoleForm from "./pages/Dashboard/EditRoleForm";
 // import EditBranch from "./pages/Dashboard/EditBranch";
 // import EditEmployee from "./pages/Dashboard/EditEmployee";
 // import EditPage from "./pages/Dashboard/EditPage";
@@ -74,25 +77,34 @@ const App = () => {
               <Route index element={<Dashboard />} />
               <Route path="editPage/:id" element={<EditPage />} />
               <Route path="employee">
-                <Route path="display" element={<Employee />} />
+                <Route path="display" index element={<Employee />} />
                 <Route path="create" element={<CreateEmployee />} />
-                <Route path="edit" element={<EditEmployee />} />
+                <Route path="edit">
+                  <Route index element={<EditEmployee />} />
+                  <Route path=":id" element={<EditEmployeeForm />} />
+                </Route>
                 <Route path="delete" element={<DeleteEmployee />} />
               </Route>
               <Route path="branch">
-                <Route path="display" element={<Branch />} />
+                <Route path="display" index element={<Branch />} />
                 <Route path="create" element={<CreateBranch />} />
-                <Route path="edit" element={<EditBranch />} />
+                <Route path="edit">
+                  <Route index element={<EditBranch />} />
+                  <Route path=":id" element={<EditBranchForm />} />
+                </Route>
                 <Route path="delete" element={<DeleteBranch />} />
               </Route>
               <Route path="role">
-                <Route path="display" element={<Role />} />
+                <Route path="display" index element={<Role />} />
                 <Route path="create" element={<CreateRole />} />
-                <Route path="edit" element={<EditRole />} />
+                <Route path="edit">
+                  <Route index element={<EditRole />} />
+                  <Route path=":id" element={<EditRoleForm />} />
+                </Route>
                 <Route path="delete" element={<DeleteRole />} />
               </Route>
               <Route path="point">
-                <Route path="display" element={<Points />} />
+                <Route path="display" index element={<Points />} />
                 <Route
                   path="confirmpointreqfrombm"
                   element={<ConfirmPoints />}

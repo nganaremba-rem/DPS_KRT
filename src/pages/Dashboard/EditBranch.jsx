@@ -1,21 +1,15 @@
-import { Modal } from "@mui/material";
-import React, { useMemo, useState } from "react";
+import React, { useMemo } from "react";
 import { useQuery } from "react-query";
+import { Link } from "react-router-dom";
 import { fetchBranches } from "../../api/Api";
-import { Loading } from "../../components";
 import MainSkeleton from "../../components/MainSkeleton";
 import { ReactTable } from "../../components/ReactTable";
-import { useStateContext } from "../../context/ContextProvider";
 import useAuth from "../../hooks/useAuth";
-import { lazyLoad } from "../../lazyLoad";
 import { getTableCols, getTableData } from "../../reactTableFn";
-import EditPage from "./EditPage";
 // const ReactTable = lazyLoad("./components/ReactTable", "ReactTable");
 
 const EditBranch = () => {
   try {
-    const { openModal, setOpenModal } = useStateContext();
-    const [branchID, setBranchID] = useState();
     const { user } = useAuth();
     // fetch employees fnc
     const {
@@ -44,16 +38,12 @@ const EditBranch = () => {
           Header: "Edit",
           Cell: ({ row }) => {
             return (
-              <button
-                onClick={() => {
-                  console.log(row);
-                  setBranchID(row.values.id);
-                  setOpenModal(true);
-                }}
+              <Link
+                to={`${row.values.divCd}`}
                 className="bg-violet-500 text-white px-5 py-2 rounded-full"
               >
                 Edit
-              </button>
+              </Link>
             );
           },
         },
@@ -71,12 +61,6 @@ const EditBranch = () => {
           tableName={"Edit Branch"}
           tableHooks={tableHooks}
         />
-        <Modal open={openModal} onClose={() => setOpenModal(false)}>
-          <EditPage
-            pageName={"Edit Branch"}
-            route={`branch/editBranch/${branchID}`}
-          />
-        </Modal>
       </>
     );
   } catch (err) {

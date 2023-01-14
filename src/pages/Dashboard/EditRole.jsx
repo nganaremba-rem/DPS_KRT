@@ -1,22 +1,16 @@
-import { Modal } from "@mui/material";
-import React, { useMemo, useState } from "react";
+import React, { useMemo } from "react";
 import { useQuery } from "react-query";
+import { Link } from "react-router-dom";
 import { fetchRoles } from "../../api/Api";
-import { Loading } from "../../components";
 import MainSkeleton from "../../components/MainSkeleton";
 import { ReactTable } from "../../components/ReactTable";
-import { useStateContext } from "../../context/ContextProvider";
 import useAuth from "../../hooks/useAuth";
-import { lazyLoad } from "../../lazyLoad";
 import { getTableCols, getTableData } from "../../reactTableFn";
-import EditPage from "./EditPage";
 
 // const ReactTable = lazyLoad("./components/ReactTable", "ReactTable");
 
 const EditRole = () => {
   try {
-    const { openModal, setOpenModal } = useStateContext();
-    const [roleId, setRoleId] = useState();
     const { user } = useAuth();
     // fetch roles fnc
 
@@ -46,15 +40,12 @@ const EditRole = () => {
           Header: "Edit",
           Cell: ({ row }) => {
             return (
-              <button
-                onClick={() => {
-                  setRoleId(row.values.id);
-                  setOpenModal(true);
-                }}
+              <Link
+                to={row.values.roleCd}
                 className="bg-violet-500 text-white px-5 py-2 rounded-full"
               >
                 Edit
-              </button>
+              </Link>
             );
           },
         },
@@ -72,13 +63,6 @@ const EditRole = () => {
           tableName={"Edit Role"}
           tableHooks={tableHooks}
         />
-        <Modal open={openModal} onClose={() => setOpenModal(false)}>
-          <EditPage
-            pageName={"Edit Roles"}
-            onSubmitHandlerFnc={() => {}}
-            route={`roles/${roleId}`}
-          />
-        </Modal>
       </>
     );
   } catch (err) {
