@@ -5,6 +5,7 @@ import MainSkeleton from "../../components/MainSkeleton";
 import { ReactTable } from "../../components/ReactTable";
 import useAuth from "../../hooks/useAuth";
 import { getTableCols, getTableData } from "../../reactTableFn";
+import { getCsvHeadersData } from "../../utils/getCsvHeadersData";
 
 // const ReactTable = lazyLoad("./components/ReactTable", "ReactTable");
 
@@ -32,7 +33,21 @@ const Branch = () => {
     if (isLoading) return <MainSkeleton />;
     if (isError) return <h1>{error?.message}</h1>;
 
-    return <ReactTable columns={columns} data={data} tableName={"Branches"} />;
+    const { headers, data: csvData } = getCsvHeadersData(
+      branches?.data?.response,
+    );
+
+    return (
+      <ReactTable
+        columns={columns}
+        data={data}
+        tableName={"Branches"}
+        csvLinkProps={{
+          headers,
+          data: csvData,
+        }}
+      />
+    );
   } catch (err) {
     console.error(err);
     return <>Error</>;

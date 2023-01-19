@@ -7,6 +7,7 @@ import { lazyLoad } from "../../lazyLoad";
 import { ReactTable } from "../../components/ReactTable";
 import useAuth from "../../hooks/useAuth";
 import { getTableCols, getTableData } from "../../reactTableFn";
+import { getCsvHeadersData } from "../../utils/getCsvHeadersData";
 
 // const ReactTable = lazyLoad("./components/ReactTable", "ReactTable");
 
@@ -40,12 +41,20 @@ const PointRequestHistory = () => {
     if (isLoading) return <MainSkeleton />;
     if (isError) return <h1>{error.message}</h1>;
 
+    const { headers, data: csvData } = getCsvHeadersData(
+      pointRequestHistory?.data?.response,
+    );
+
     return (
       // <></>
       <ReactTable
         columns={columns}
         data={tableData}
         tableName={"Points Request History"}
+        csvLinkProps={{
+          headers,
+          data: csvData,
+        }}
       />
     );
   } catch (err) {

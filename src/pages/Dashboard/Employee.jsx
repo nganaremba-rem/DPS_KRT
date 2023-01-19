@@ -8,6 +8,8 @@ import { ReactTable } from "../../components/ReactTable";
 import useAuth from "../../hooks/useAuth";
 import { useEffect } from "react";
 import { getTableCols, getTableData } from "../../reactTableFn";
+import { CSVLink } from "react-csv";
+import { getCsvHeadersData } from "../../utils/getCsvHeadersData";
 
 // const ReactTable = lazyLoad("./components/ReactTable", "ReactTable");
 
@@ -68,9 +70,22 @@ const Employee = () => {
     if (isLoading) return <MainSkeleton />;
     if (isError) return <h1>{error.message}</h1>;
 
+    const { headers, data } = getCsvHeadersData(employees?.data?.response);
+
     return (
-      // <></>
-      <ReactTable columns={columns} data={tableData} tableName={"Employees"} />
+      <>
+        <ReactTable
+          columns={columns}
+          data={tableData}
+          tableName={"Employees"}
+          csvLinkProps={{
+            headers,
+            data,
+            buttonName: "Download as CSV",
+            fileName: `Employee ${new Date(Date.now())}`,
+          }}
+        />
+      </>
     );
   } catch (err) {
     console.log(err);

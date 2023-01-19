@@ -2,6 +2,7 @@ import { motion } from "framer-motion";
 import React, { useRef } from "react";
 import { useEffect } from "react";
 import { useState } from "react";
+import { CSVLink } from "react-csv";
 import { SyncLoader } from "react-spinners";
 import {
   useGlobalFilter,
@@ -18,6 +19,7 @@ export const ReactTable = ({
   tableHooks = false,
   tableName,
   message = "",
+  csvLinkProps,
 }) => {
   const {
     getTableProps,
@@ -78,9 +80,21 @@ export const ReactTable = ({
           }}
           className="m-3 w-screen bg-white  p-5 rounded-lg overflow-hidden"
         >
-          <h1 className="sticky left-0 font-extrabold text-xl text-gray-600 border-b-2 p-2 mb-5">
-            {tableName}
-          </h1>
+          <div className="sticky  left-0  border-b-2 p-2 mb-5 flex justify-between">
+            <h1 className="font-extrabold text-xl text-gray-600">
+              {tableName}
+            </h1>
+            {csvLinkProps && (
+              <CSVLink
+                className="bg-gray-800 text-sm text-center h-min text-white px-4 font-bold py-1 rounded-lg"
+                headers={csvLinkProps.headers}
+                data={csvLinkProps.data}
+                filename={csvLinkProps?.fileName}
+              >
+                {csvLinkProps.buttonName || "Download as CSV"}
+              </CSVLink>
+            )}
+          </div>
           <GlobalFilter
             preGlobalFilteredRows={preGlobalFilteredRows}
             setGlobalFilter={setGlobalFilter}
