@@ -1,7 +1,7 @@
 import Button from "@mui/material/Button";
 import axios from "axios";
 import React, { Suspense, useEffect } from "react";
-import { AiOutlineHome } from "react-icons/ai";
+import { AiOutlineHome, AiOutlineMessage } from "react-icons/ai";
 import { CgMenuLeft } from "react-icons/cg";
 import { FaRegUserCircle } from "react-icons/fa";
 import { IoMdNotificationsOutline } from "react-icons/io";
@@ -130,6 +130,10 @@ const Navbar = () => {
           </Button> */}
           <Link to={"/dashboard"}>
             <NavButton icon={<AiOutlineHome size={27} color="#36c1e3" />} />
+          </Link>
+
+          <Link to={"/dashboard/sendMessage"}>
+            <NavButton icon={<AiOutlineMessage size={27} color="#36c1e3" />} />
           </Link>
 
           {userOptions.data.options.map((option, index) => {

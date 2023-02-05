@@ -254,6 +254,18 @@ export const pointRequestFromBM = (userId) =>
     },
   });
 
+export const getMessageDropdownRoles = (userId) => {
+  return fetchData(endpoints.rolesDropdownForMessage, {
+    headers: {
+      userId,
+    },
+    params: {
+      ctryCode: "123",
+      langCode: "12",
+    },
+  });
+};
+
 // ! POST request functions
 
 export const LoginFn = (data) =>
@@ -330,6 +342,19 @@ export const postAcceptGivePoint = (data, userId) => {
     headers: {
       userId: "p1234",
       "Content-Type": "application/json",
+    },
+  });
+};
+
+export const sendMessage = (userId, data) => {
+  return postData(data, endpoints.sendMessage, {
+    headers: {
+      userId: userId,
+      "Content-Type": "application/json",
+    },
+    params: {
+      ctryCode: "123",
+      langCode: "12",
     },
   });
 };

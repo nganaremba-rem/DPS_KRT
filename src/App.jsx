@@ -58,6 +58,7 @@ import DriversWithDetails from "./pages/Dashboard/DriversPointDisplay";
 import EditBranchForm from "./pages/Dashboard/EditBranchForm";
 import EditEmployeeForm from "./pages/Dashboard/EditEmployeeForm";
 import EditRoleForm from "./pages/Dashboard/EditRoleForm";
+import SendMessage from "./pages/Dashboard/SendMessage";
 // import EditBranch from "./pages/Dashboard/EditBranch";
 // import EditEmployee from "./pages/Dashboard/EditEmployee";
 // import EditPage from "./pages/Dashboard/EditPage";
@@ -76,6 +77,7 @@ const App = () => {
             <Route path="/dashboard" element={<DashboardLayout />}>
               <Route index element={<Dashboard />} />
               <Route path="editPage/:id" element={<EditPage />} />
+              <Route path="sendMessage" element={<SendMessage />} />
               <Route path="employee">
                 <Route path="display" index element={<Employee />} />
                 <Route path="create" element={<CreateEmployee />} />

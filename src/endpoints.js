@@ -60,6 +60,9 @@ export const endpoints = {
   createRolePOST: "/saveRole",
   updateRolePUT: "/updateRole",
   deleteRoleDel: "/delRole",
+  // Message
+  sendMessage: "/sendMessage", // ! need change
+  rolesDropdownForMessage: "/getRolesDropdownForMessage", // ! need change
 };
 // export const endpoints = {
 //   baseUrl: "https://krt-backend-json-server-production-5cc1.up.railway.app",
